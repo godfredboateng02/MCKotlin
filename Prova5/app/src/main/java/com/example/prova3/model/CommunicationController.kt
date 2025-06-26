@@ -1,4 +1,4 @@
-package com.example.prova3
+package com.example.prova3.model
 
 import android.net.Uri
 import android.util.Log
@@ -19,13 +19,18 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import android.content.Context
 
 object CommunicationController {
     private val BASE_URL = "https://develop.ewlab.di.unimi.it/mc/2425"
     private val TAG = CommunicationController::class.simpleName
-    //var sid : String? = null
-    val sid : String = "FmyZjSXI6ghjNDUVLhtl9aQB8zdZAj1hpdX5c7L2d2lpnSJecZQKp1nxzvZ4DY9N"
-    val uid : Int = 43841 // Example user ID, replace with actual logic to retrieve or set it
+
+    // SOLO per LocationManager, serve context una volta
+    private lateinit var appContext: Context
+
+    fun initialize(context: Context) {
+        appContext = context.applicationContext
+    }
 
     private val client = HttpClient(Android) {
         install(ContentNegotiation) {
@@ -41,7 +46,6 @@ object CommunicationController {
         DELETE,
         PUT
     }
-
 
     suspend fun genericRequest(url: String, method: HttpMethod,
                                queryParameters: Map<String, Any> = emptyMap(),
@@ -71,7 +75,7 @@ object CommunicationController {
         return result
     }
 
-    suspend fun createUser(): UserResponse {
+    suspend fun signUp(): UserResponse {
         Log.d(TAG, "createUser")
         val url = BASE_URL+"/user"
         val httpResponse = genericRequest (url, HttpMethod.POST)
@@ -79,8 +83,12 @@ object CommunicationController {
         return result
     }
 
+    // PRENDE uid e sid da Storage automaticamente
     suspend fun getUserInfo(): GetUserInfo{
         Log.d(TAG, "getUserInfo")
+        val uid = Storage.getUid()  // Prende da Storage!
+        val sid = Storage.getSid()  // Prende da Storage!
+
         val url = BASE_URL+"/user/${uid}"
         val queryParameters = mapOf("sid" to sid)
         val httpResponse = genericRequest(url , HttpMethod.GET, queryParameters = queryParameters)
@@ -88,8 +96,12 @@ object CommunicationController {
         return result
     }
 
+    // PRENDE uid e sid da Storage automaticamente
     suspend fun putUserInfo(user: PutUserInfo): Unit{
         Log.d(TAG, "putUserInfo: $user")
+        val uid = Storage.getUid()  // Prende da Storage!
+        val sid = Storage.getSid()  // Prende da Storage!
+
         val url = BASE_URL+"/user/${uid}"
         val response = genericRequest(
             url = url,
@@ -102,12 +114,17 @@ object CommunicationController {
             Log.d(TAG, "Aggiornamento completato con successo")
         } else {
             Log.e(TAG, "Errore aggiornamento: ${response.status}")
-            Log.e(TAG, response.bodyAsText()) // utile per vedere l'errore vero
+            Log.e(TAG, response.bodyAsText())
         }
     }
 
-    suspend fun getMenus(lat: Float, lng: Float): List<Menu>{
+    // PRENDE sid e location automaticamente da Storage/LocationManager
+    suspend fun getMenus(): List<Menu>{
         Log.d(TAG, "getMenus")
+        val sid = Storage.getSid()  // Prende da Storage!
+        val lat = LocationManager.getLat() ?: 0.0f
+        val lng = LocationManager.getLng() ?: 0.0f
+
         val url = BASE_URL+"/menu"
         val httpResponse = genericRequest(
             url = url,
@@ -121,8 +138,13 @@ object CommunicationController {
         return risposta
     }
 
-    suspend fun getMenuDetails(mid: Int, lat: Float, lng: Float): MenuDetails{
+    // COME JAVASCRIPT: solo mid come parametro, resto automatico!
+    suspend fun getMenuDetails(mid: Int): MenuDetails{
         Log.d(TAG, "getMenuDetails")
+        val sid = Storage.getSid()  // Prende da Storage!
+        val lat = LocationManager.getLat() ?: 0.0f
+        val lng = LocationManager.getLng() ?: 0.0f
+
         val url = BASE_URL+"/menu/${mid}"
         val httpResponse = genericRequest(
             url = url,
@@ -136,22 +158,47 @@ object CommunicationController {
         return risultato
     }
 
+    // PRENDE automaticamente sid e location da Storage/LocationManager
+    suspend fun postOrder(mid: Int): MenuBuyed? {
+        val sid = Storage.getSid()  // Prende da Storage!
+        val lat = LocationManager.getLat() ?: 0.0f
+        val lng = LocationManager.getLng() ?: 0.0f
 
-    suspend fun postOrder(mid: Int, lat: Float, lng: Float): MenuBuyed? {
         val url  = "$BASE_URL/menu/$mid/buy"
         val body = MenuBuyQuery(sid, Location(lat, lng))
 
         val resp = genericRequest(url, HttpMethod.POST, requestBody = body)
 
-        if (!resp.status.isSuccess()) {                      // ⬅︎ esci prima
+        if (!resp.status.isSuccess()) {
             Log.e(TAG, "HTTP ${resp.status}: ${resp.bodyAsText()}")
-            return null                                      // o lancia un'eccezione
+            return null
         }
-        return resp.body()                                   // OK: MenuBuyed
+        return resp.body()
     }
 
+    // COME JAVASCRIPT: solo mid come parametro, sid automatico!
+    suspend fun getMenuImage(mid: Int): Image{
+        Log.d(TAG, "getMenuImage")
+        val sid = Storage.getSid()  // Prende da Storage!
+
+        val url = "$BASE_URL/menu/$mid/image"
+        val httpResponse = genericRequest(
+            url = url,
+            method = HttpMethod.GET,
+            queryParameters = mapOf("sid" to sid, "mid" to mid)
+        )
+        if (!httpResponse.status.isSuccess()){
+            Log.e(TAG, "Errore aggiornamento: ${httpResponse.status}")
+        }
+        val risultato : Image = httpResponse.body()
+        return risultato
+    }
+
+    // PRENDE automaticamente sid da Storage
     suspend fun getOrderStatus(oid : Int): OrderStatus?{
         Log.d(TAG,"getOrderStatus")
+        val sid = Storage.getSid()  // Prende da Storage!
+
         val url = BASE_URL+"/order/$oid"
         val httpResponse = genericRequest(
             url = url,
@@ -167,25 +214,15 @@ object CommunicationController {
         return risultato
     }
 
+    // PRENDE automaticamente sid da Storage
     suspend fun deleteLastOrder () : Unit{
         Log.d(TAG, "deleteLastOrder")
+        val sid = Storage.getSid()  // Prende da Storage!
+
         val url = BASE_URL+"/order"
         val httpResponse = genericRequest(url, HttpMethod.DELETE, queryParameters = mapOf("sid" to sid))
         if (!httpResponse.status.isSuccess()){
             Log.d(TAG,"Error: ${httpResponse.status}")
         }
     }
-
-    suspend fun getImage(mid: Int) : Base64image?{
-        Log.d(TAG, "getImage")
-        val url = BASE_URL+"/menu/${mid}/image"
-        val httpResponse = genericRequest(url, HttpMethod.GET, queryParameters = mapOf("sid" to sid, "mid" to mid))
-        if(!httpResponse.status.isSuccess()){
-            return null
-        }
-        Log.d(TAG,"immagini a buon fine")
-        return httpResponse.body()
-    }
-
 }
-

@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.prova3.model.Storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +24,7 @@ class MenuImageViewModel : ViewModel() {
         if (_images.value[mid] != null) return@launch               // già in cache
 
         val base64 = withContext(Dispatchers.IO) {
-            CommunicationController.getImage(mid)?.base64
+            //Storage.getImage(mid)?.base64
         } ?: return@launch
 
         val clean  = base64.substringAfter(',')

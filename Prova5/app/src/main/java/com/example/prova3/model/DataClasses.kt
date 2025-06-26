@@ -1,6 +1,7 @@
-package com.example.prova3
+package com.example.prova3.model
 
 import kotlinx.serialization.Serializable
+import kotlin.io.encoding.Base64
 
 @Serializable
 data class UserResponse(
@@ -22,7 +23,7 @@ data class GetUserInfo(
     val cardExpireMonth: Int?,
     val cardExpireYear: Int?,
     val cardCVV: String?,
-    val uid: Int = CommunicationController.uid,
+    val uid: Int,
     val lastOid: Int?,
     val orderStatus: String?
 )
@@ -37,6 +38,11 @@ data class PutUserInfo(
     val cardExpireYear: Int?,
     val cardCVV: String?,
     val sid: String
+)
+
+@Serializable
+data class Image(
+    val base64: String
 )
 
 @Serializable
@@ -98,9 +104,5 @@ data class OrderStatus(
     val deliveryTimestamp: String? = null,
 
     val currentPosition: Location
-)
 
-@Serializable
-data class Base64image(
-    val base64: String?
 )

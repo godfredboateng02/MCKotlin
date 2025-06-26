@@ -6,6 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.prova3.model.CommunicationController
+import com.example.prova3.model.Location
+import com.example.prova3.model.Menu
 import kotlinx.coroutines.launch
 
 class GestioneMenu : ViewModel() {
@@ -24,10 +27,7 @@ class GestioneMenu : ViewModel() {
     /** ❸ avvia la rete dentro lo scope della ViewModel */
     fun caricaMenu() = viewModelScope.launch {
         try {
-            menuList = CommunicationController.getMenus(
-                lat = posizione.lat,
-                lng = posizione.lng
-            )
+            menuList = CommunicationController.getMenus()
             errorMessage = null                        // reset eventuali errori precedenti
             Log.d("GestioneMenu", "Dati ottenuti")
         } catch (e: Exception) {

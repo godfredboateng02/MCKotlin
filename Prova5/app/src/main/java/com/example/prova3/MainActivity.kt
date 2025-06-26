@@ -20,6 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.prova3.model.CommunicationController
+import com.example.prova3.model.GetUserInfo
+import com.example.prova3.model.Menu
+import com.example.prova3.model.MenuBuyed
+import com.example.prova3.model.MenuDetails
+import com.example.prova3.model.OrderStatus
+import com.example.prova3.model.PutUserInfo
+import com.example.prova3.model.Storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,6 +36,12 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // In MyApplication.onCreate():
+        Storage.initialize(this)
+        LocationManager.initialize(this)
+        CommunicationController.initialize(this)
+
+// Fatto! Ora funziona ovunque nell'app
         enableEdgeToEdge()
         setContent {
             MenuScreen()
@@ -43,7 +57,7 @@ val userUpdate = PutUserInfo(
     cardExpireMonth = 12,
     cardExpireYear = 2026,
     cardCVV = "123",
-    sid = CommunicationController.sid
+    sid = Storage.getSid()
 )
 
 @Preview
@@ -91,7 +105,7 @@ fun App(){
         Button(onClick = {
             try {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val risposta : List<Menu> = CommunicationController.getMenus(lat = 45.4642f,lng = 9.19f)
+                    val risposta : List<Menu> = CommunicationController.getMenus()
                     if (risposta != null){
                         Log.d("MainActivity", risposta.toString())
                     }
@@ -107,7 +121,7 @@ fun App(){
         Button(onClick = {
             try {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val risposta : MenuDetails = CommunicationController.getMenuDetails(mid=52,lat = 45.4642f,lng = 9.19f)
+                    val risposta : MenuDetails = CommunicationController.getMenuDetails(mid=52)
                     if (risposta != null){
                         Log.d("MainActivity", risposta.toString())
                     }
@@ -122,7 +136,7 @@ fun App(){
         Button(onClick = {
             try {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val menuBuyed : MenuBuyed? = CommunicationController.postOrder(mid= 56,lat = 45.4642f, lng = 9.19f)
+                    val menuBuyed : MenuBuyed? = CommunicationController.postOrder(mid= 56)
                     if (menuBuyed != null){
                         Log.d("MainActivity",menuBuyed.toString())
                         oid = menuBuyed.oid
