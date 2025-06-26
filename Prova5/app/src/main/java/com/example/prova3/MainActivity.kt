@@ -58,7 +58,7 @@ val userUpdate = PutUserInfo(
     cardExpireMonth = 12,
     cardExpireYear = 2026,
     cardCVV = "123",
-    sid = Storage.getSid()
+    sid = "342423423"
 )
 
 @Preview

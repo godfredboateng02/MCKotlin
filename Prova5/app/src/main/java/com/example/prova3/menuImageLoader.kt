@@ -27,10 +27,10 @@ class MenuImageViewModel : ViewModel() {
             //Storage.getImage(mid)?.base64
         } ?: return@launch
 
-        val clean  = base64.substringAfter(',')
-        val bytes  = Base64.decode(clean, Base64.DEFAULT)
-        val bmp    = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
+        //val clean  = base64.substringAfter(',')
+        //val bytes  = Base64.decode(clean, Base64.DEFAULT)
+        //val bmp    = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
 
-        _images.update { it + (mid to bmp) }                        // aggiorna solo quella chiave
+        //_images.update { it + (mid to bmp) }                        // aggiorna solo quella chiave
     }
 }

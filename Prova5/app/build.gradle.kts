@@ -2,17 +2,17 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt")  // <-- AGGIUNGI QUESTA RIGA
+    id("com.google.devtools.ksp")
 
     id("kotlinx-serialization")
 }
 
 android {
-    namespace = "com.example.ktorexample"
+    namespace = "com.example.prova3"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.ktorexample"
+        applicationId = "com.example.prova3"
         minSdk = 34
         targetSdk = 34
         versionCode = 1
@@ -45,7 +45,7 @@ android {
 dependencies {
     implementation("androidx.room:room-runtime:2.5.0")
     implementation("androidx.room:room-ktx:2.5.0")
-    kapt("androidx.room:room-compiler:2.5.0")
+    ksp("androidx.room:room-compiler:2.5.0")
 
     // DataStore (sostituisce SharedPreferences)
     implementation("androidx.datastore:datastore-preferences:1.0.0")

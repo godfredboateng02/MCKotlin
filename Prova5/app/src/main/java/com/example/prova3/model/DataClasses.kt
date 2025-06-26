@@ -101,8 +101,8 @@ data class OrderStatus(
     val status: String,
     val deliveryLocation: Location,
 
-    val deliveryTimestamp: String? = null,
-
+    val deliveryTimestamp: String?,
+    val expectedDeliveryTimestamp: String?,
     val currentPosition: Location
 
 )

@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.prova3.AppDatabase
-import com.example.prova3.ImageDao
 import kotlinx.coroutines.flow.first
 
 // Extension per creare il DataStore - applicata al Context
@@ -213,26 +211,30 @@ object Storage {
         }
     }
 
-    suspend fun getImage(mid: Int, version: Int): String {
-        checkInitialized()
-        val image = getImageDao().getImage(mid, version)
+    private fun getImageRepository(): ImageRepository {
+        return ImageRepository(getImageDao())
+    }
 
-        return when (image) {
+    suspend fun getImage(mid: Int, version: Int): String {
+        val repository = getImageRepository()
+        val result = repository.getImage(mid, version)
+
+        return when (result) {
             "NOT_FOUND" -> {
-                val raw: Image = CommunicationController.getMenuImage(mid)
-                val base64Image = raw.base64
+                val raw = CommunicationController.getMenuImage(mid)
+                val image = raw.base64
                 println("presa da rete")
-                getImageDao().addImage(mid, version, base64Image)
-                base64Image
+                repository.addImage(mid, version, image)
+                image
             }
             "VERSION_MISMATCH" -> {
-                val raw: Image = CommunicationController.getMenuImage(mid)
-                val base64Image = raw.base64
-                println("presa da rete")
-                getImageDao().updateImage(mid, version, base64Image)
-                base64Image
+                val raw = CommunicationController.getMenuImage(mid)
+                val image = raw.base64
+                println("presa da rete - aggiornamento versione")
+                repository.updateImage(mid, version, image)
+                image
             }
-            else -> image
+            else -> result
         }
     }
 
