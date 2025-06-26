@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.prova3.AppDatabase
+import com.example.prova3.ImageDao
 import kotlinx.coroutines.flow.first
 
 // Extension per creare il DataStore - applicata al Context
@@ -37,9 +39,15 @@ object Storage {
     private var cachedRistorante: Location? = null
     private var cachedConsegna: Boolean? = null
 
-    // Database - inizializzato lazy (solo quando serve)
-    private val database by lazy { AppDatabase.getDatabase(appContext) }
-    private val imageDao by lazy { database.imageDao() }
+    // Database - inizializzato quando serve (non lazy)
+    private fun getDatabase(): AppDatabase {
+        checkInitialized()
+        return AppDatabase.getDatabase(appContext)
+    }
+
+    private fun getImageDao(): ImageDao {
+        return getDatabase().imageDao()
+    }
 
     // INIZIALIZZAZIONE - serve solo per il Context
     fun initialize(context: Context) {
@@ -207,21 +215,21 @@ object Storage {
 
     suspend fun getImage(mid: Int, version: Int): String {
         checkInitialized()
-        val image = imageDao.getImage(mid, version)
+        val image = getImageDao().getImage(mid, version)
 
         return when (image) {
             "NOT_FOUND" -> {
                 val raw: Image = CommunicationController.getMenuImage(mid)
                 val base64Image = raw.base64
                 println("presa da rete")
-                imageDao.addImage(mid, version, base64Image)
+                getImageDao().addImage(mid, version, base64Image)
                 base64Image
             }
             "VERSION_MISMATCH" -> {
                 val raw: Image = CommunicationController.getMenuImage(mid)
                 val base64Image = raw.base64
                 println("presa da rete")
-                imageDao.updateImage(mid, version, base64Image)
+                getImageDao().updateImage(mid, version, base64Image)
                 base64Image
             }
             else -> image

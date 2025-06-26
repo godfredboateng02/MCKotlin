@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.prova3.model.CommunicationController
 import com.example.prova3.model.GetUserInfo
+import com.example.prova3.model.LocationManager
 import com.example.prova3.model.Menu
 import com.example.prova3.model.MenuBuyed
 import com.example.prova3.model.MenuDetails

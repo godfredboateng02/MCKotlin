@@ -1,4 +1,4 @@
-package com.example.prova3
+package com.example.prova3.model
 
 import android.Manifest
 import android.content.Context
