@@ -56,7 +56,7 @@ fun Profile(navController: NavController, gestioneAccountRepository: GestioneAcc
     }
 
 
-    Column(modifier = Modifier.fillMaxSize().background(Color(0xFFDEEEEE))) {
+    Column(modifier = Modifier.fillMaxSize().background(Color(0xFFEEEEEE))) {
 
         Box(
             modifier = Modifier
