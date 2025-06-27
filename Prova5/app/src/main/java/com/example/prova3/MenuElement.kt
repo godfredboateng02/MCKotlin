@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,10 +27,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.prova3.model.Menu
+import com.example.prova3.repository.GestioneMenuRepository.MenuListItem
 
 @Composable
-fun MenuElement(menu: Menu){
+fun MenuElement(menu: MenuListItem){
     Box(modifier = box
         .clickable {
             Log.d("MenuElement", "main")
@@ -45,26 +47,27 @@ fun MenuElement(menu: Menu){
 
             MenuImageView(56)*/
 
+
             MenuImageView(
-                mid       = menu.mid,                    // id del menu
+                base64       = menu.immagine,                    // id del menu
                 modifier  = image.aspectRatio(1f)                     // quadrata; cambia se vuoi
             )
 
-            Text(menu.name, style = titoloText)
-            Text(menu.shortDescription, style = descizioneText, maxLines = 3, overflow = TextOverflow.Ellipsis)
+            Text(menu.nome, style = titoloText)
+            Text(menu.descrizione, style = descizioneText, maxLines = 3, overflow = TextOverflow.Ellipsis)
 
-            Row (modifier = priceMinutesRow, horizontalArrangement = Arrangement.SpaceBetween){
+            Row (modifier = priceMinutesRow, horizontalArrangement = Arrangement.SpaceBetween,){
                 //Prezzo
-                Text(menu.price.toString()+"€")
+                Text(menu.prezzo.toString()+"€", style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium, color = Color(0xFF22BD3F)))
                 //Minuti
-                Text(menu.deliveryTime.toString())
+                Text(menu.tempo.toString()+"'",style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium, color = Color(0xFFFF7300)))
             }
         }
     }
 }
 //MODIFIERS
 val box = Modifier
-    .size(187.dp,260.dp)
+    .width(187.dp).wrapContentHeight()
     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp, bottomStart = 16.dp, bottomEnd = 16.dp))
     .background(Color(0xFFFFFFFF))
 
@@ -76,17 +79,20 @@ private val image = Modifier
 
 val priceMinutesRow = Modifier
     .fillMaxWidth()
+    .padding(top = 15.dp, start = 15.dp, end = 15.dp)
 
 //TEXTSTYLE
 
 val titoloText = TextStyle(
-    fontSize = 16.sp,
-    fontWeight = FontWeight.Medium,
+    fontSize = 20.sp,
+    fontWeight = FontWeight.SemiBold,
     color = Color(0xFFFF6600)
 )
 
 val descizioneText = TextStyle(
     color = Color(0xFF666666),
-    textAlign = TextAlign.Center
+    textAlign = TextAlign.Center,
+    fontSize =  18.sp,
+    fontWeight = FontWeight.Medium
 )
 

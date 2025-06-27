@@ -1,44 +1,45 @@
+import android.graphics.BitmapFactory
+import android.util.Base64
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.prova3.MenuImageViewModel
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun MenuImageView(
-    mid: Int,
+    base64: String,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Crop
 ) {
-    val vm: MenuImageViewModel = viewModel()
+    /* 1️⃣  Decodifica una sola volta quando cambia la stringa */
+    val imageBitmap by produceState<ImageBitmap?>(initialValue = null, base64) {
+        value = withContext(Dispatchers.IO) {
+            runCatching {
+                val bytes   = Base64.decode(base64, Base64.DEFAULT)
+                val bitmap  = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                bitmap?.asImageBitmap()
+            }.getOrNull()
+        }
+    }
 
-    /* avvia il download solo la prima volta per questo mid */
-    LaunchedEffect(mid) { vm.load(mid) }
-
-    /* ① ottieni l’intera mappa dal StateFlow */
-    val images by vm.images.collectAsState()      // Map<Int, ImageBitmap?>
-
-    /* ② prendi la bitmap di questo mid */
-    val image: ImageBitmap? = images[mid]
-
-    if (image != null) {
+    /* 2️⃣  Disegna l’immagine o un placeholder */
+    if (imageBitmap != null) {
         Image(
-            bitmap            = image,            // è già ImageBitmap
+            bitmap         = imageBitmap!!,
             contentDescription = null,
-            modifier          = modifier,
-            contentScale      = contentScale
+            modifier       = modifier,
+            contentScale   = contentScale
         )
     } else {
-        Box(modifier.background(Color.LightGray))
+        Box(modifier.background(Color.LightGray))   // shimmer / placeholder
     }
 }
-
