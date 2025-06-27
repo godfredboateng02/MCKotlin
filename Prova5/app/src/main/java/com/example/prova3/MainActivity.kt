@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,8 +19,7 @@ import com.example.prova3.repository.GestioneMenuRepository
 import com.example.prova3.repository.GestioneOrdiniRepository
 import com.example.prova3.screens.Homepage
 import com.example.prova3.screens.Profile
-import com.example.prova3.viewmodel.HomepageViewModel
-import com.example.prova3.viewmodel.ProfileViewModel
+import com.example.prova4.screens.EditProfileData
 
 
 class MainActivity : ComponentActivity() {
@@ -72,6 +70,10 @@ class MainActivity : ComponentActivity() {
 
                 composable( route = "Profile"){
                     Profile(navController, gestioneAccountRepository)
+                }
+
+                composable ( route = "EditProfileData") {
+                    EditProfileData(navController)
                 }
             }
         }

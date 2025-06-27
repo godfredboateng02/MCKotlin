@@ -60,7 +60,7 @@ fun MenuElement(menu: MenuListItem){
                 //Prezzo
                 Text(menu.prezzo.toString()+"€", style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium, color = Color(0xFF22BD3F)))
                 //Minuti
-                Text(menu.tempo.toString()+"'",style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium, color = Color(0xFFFF7300)))
+                Text(menu.tempo.toString()+" min",style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium, color = Color(0xFFFF7300)))
             }
         }
     }

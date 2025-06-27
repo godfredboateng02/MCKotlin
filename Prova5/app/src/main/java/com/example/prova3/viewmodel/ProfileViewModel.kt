@@ -1,11 +1,10 @@
 package com.example.prova3.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.prova3.repository.GestioneAccountRepository
+import com.example.prova3.repository.GestioneAccountRepository.UpdateNameData
 import com.example.prova3.repository.GestioneAccountRepository.UserData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,4 +24,16 @@ class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository)
             }
         }
     }
+
+    fun updateUserData(user: UpdateNameData){
+        viewModelScope.launch {
+            try {
+                gestioneAccountRepository.updateUserName(user)
+                Log.d("ProfileViewModel","Modifica dei dati...")
+            }catch (e: Exception){
+                Log.d("ProfileViewModel","Error: ${e.message}")
+            }
+        }
+    }
+
 }

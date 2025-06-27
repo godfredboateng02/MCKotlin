@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -77,7 +76,7 @@ fun Profile(navController: NavController, gestioneAccountRepository: GestioneAcc
                     contentDescription = "logo",
                     Modifier.size(100.dp)
                 )
-                Text("Nome Cognome", style = nomeCognomeTextStyle, modifier = Modifier.padding(top = 40.dp, bottom = 10.dp))
+                Text("${datiUtente.value?.nome} ${datiUtente.value?.cognome}", style = nomeCognomeTextStyle, modifier = Modifier.padding(top = 40.dp, bottom = 10.dp))
                 Text("Modifica profilo", style = modificaProfiloTextStyle, modifier = Modifier
                     .clickable{navController.navigate("EditProfileData")
                     })

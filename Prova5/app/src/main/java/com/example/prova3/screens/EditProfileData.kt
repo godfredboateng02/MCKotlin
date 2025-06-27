@@ -26,10 +26,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 
-@Preview
 @Composable
-fun EditProfileData(){
+fun EditProfileData(navController: NavController){
     var cognome by rememberSaveable { mutableStateOf("") }
     var nome by rememberSaveable { mutableStateOf("") }
 
@@ -84,7 +85,11 @@ fun EditProfileData(){
         Spacer(Modifier.height(50.dp))
 
         Button(
-            onClick = {Log.d("EditProfileData","Modifica dei dati... $cognome $nome")},
+            onClick = {
+                val user = UpdateNameData(nome,cognome)
+                Log.d("EditProfileData",user.toString())
+                viewModel.updateUserData(user)
+            },
             modifier = Modifier.fillMaxWidth().padding(start = 50.dp, end = 50.dp).height(60.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xff009436))
         ) {
