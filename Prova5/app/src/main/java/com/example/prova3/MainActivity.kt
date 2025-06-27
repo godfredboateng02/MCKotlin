@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable ( route = "EditProfileData") {
-                    EditProfileData(navController)
+                    EditProfileData(navController, gestioneAccountRepository)
                 }
             }
         }
