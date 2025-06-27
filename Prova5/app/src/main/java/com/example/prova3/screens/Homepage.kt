@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,15 +26,27 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import com.example.prova3.MenuListView
 import com.example.prova3.R
+import com.example.prova3.repository.GestioneMenuRepository
+import com.example.prova3.repository.GestioneOrdiniRepository
 import com.example.prova3.viewmodel.HomepageViewModel
 
 @Composable
-fun Homepage(navController: NavController,viewModel: HomepageViewModel){
+fun Homepage(navController: NavController,gestioneMenuRepository: GestioneMenuRepository){
 
-    val listaMenu = viewModel.listaMenu.observeAsState()
+    val factory = viewModelFactory {
+        initializer {
+            HomepageViewModel(gestioneMenuRepository)
+        }
+    }
+    val viewModel: HomepageViewModel = viewModel(factory = factory)
+    val listaMenu = viewModel.listaMenu.collectAsState()
+
 
     LaunchedEffect(Unit) {
         viewModel.getListaMenu()

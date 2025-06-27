@@ -122,14 +122,18 @@ object CommunicationController {
     suspend fun getMenus(): List<Menu>{
         Log.d(TAG, "getMenus")
         val sid = Storage.getSid()  // Prende da Storage!
-        val lat = LocationManager.getLat() ?: 0.0f
-        val lng = LocationManager.getLng() ?: 0.0f
+        val lat = LocationManager.getLat()
+        val lng = LocationManager.getLng()
+        if (lat== null){
+            Log.d(TAG, "posizione null")
+
+        }
 
         val url = BASE_URL+"/menu"
         val httpResponse = genericRequest(
             url = url,
             method = HttpMethod.GET,
-            queryParameters = mapOf("sid" to sid,"lat" to lat, "lng" to lng),
+            queryParameters = mapOf("sid" to sid,"lat" to lat!!, "lng" to lng!!),
         )
         if (!httpResponse.status.isSuccess()){
             Log.e(TAG, "Errore aggiornamento: ${httpResponse.status}")

@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,16 +28,26 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import com.example.prova3.R
 import com.example.prova3.components.CardElement
 import com.example.prova3.components.LastOrderView
+import com.example.prova3.repository.GestioneAccountRepository
 import com.example.prova3.viewmodel.ProfileViewModel
 
 @Composable
-fun Profile(navController: NavController, viewModel: ProfileViewModel){
+fun Profile(navController: NavController, gestioneAccountRepository: GestioneAccountRepository){
 
-    val datiUtente = viewModel.datiUtente.observeAsState()
+    val factory = viewModelFactory {
+        initializer {
+            ProfileViewModel(gestioneAccountRepository)
+        }
+    }
+    val viewModel: ProfileViewModel = viewModel(factory = factory)
+    val datiUtente = viewModel.datiUtente.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getUserData()

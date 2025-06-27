@@ -7,22 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.prova3.repository.GestioneAccountRepository
 import com.example.prova3.repository.GestioneAccountRepository.UserData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class ProfileViewModel : ViewModel() {
-    private val _datiUtente = MutableLiveData<UserData>()
-    val datiUtente : LiveData<UserData> = _datiUtente
-
-    val gestioneAccount = GestioneAccountRepository()
+class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository) : ViewModel() {
+    private val _datiUtente = MutableStateFlow<UserData?>(null)
+    val datiUtente : StateFlow<UserData?> = _datiUtente
 
     fun getUserData(){
         viewModelScope.launch {
             try {
-                val result = gestioneAccount.getUserData()
-                if (result != null)
-                    _datiUtente.postValue(result)
-                else
-                    Log.d("ProfileViewModel","Error: dati utente null")
+                _datiUtente.value = gestioneAccountRepository.getUserData()
+
             }catch (e: Exception){
                 Log.d("ProfileViewModel","${e.message}")
             }

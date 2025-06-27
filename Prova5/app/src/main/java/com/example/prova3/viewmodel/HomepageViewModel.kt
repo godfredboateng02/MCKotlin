@@ -7,19 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.prova3.repository.GestioneMenuRepository
 import com.example.prova3.repository.GestioneMenuRepository.MenuListItem
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class HomepageViewModel : ViewModel(){
-    private val _listaMenu = MutableLiveData<List<MenuListItem>>()
-    val listaMenu: LiveData<List<MenuListItem>> = _listaMenu
+class HomepageViewModel(val gestioneMenuRepository: GestioneMenuRepository) : ViewModel(){
+    private val _listaMenu = MutableStateFlow<List<MenuListItem>?>(null)
+    val listaMenu: StateFlow<List<MenuListItem>?> = _listaMenu
 
-    val rep = GestioneMenuRepository()
 
     fun getListaMenu(){
         viewModelScope.launch {
             try{
-                val result = rep.lista()
-                _listaMenu.postValue(result)
+                _listaMenu.value = gestioneMenuRepository.lista()
             }catch (e: Exception){
                 Log.d("HomepageViewModel","Error: ${e.message}")
             }
