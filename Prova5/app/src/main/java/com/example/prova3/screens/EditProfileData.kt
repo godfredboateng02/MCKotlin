@@ -98,9 +98,7 @@ fun EditProfileData(navController: NavController, gestioneAccountRepository: Ges
 
         Button(
             onClick = {
-                val user = UpdateNameData(nome,cognome)
-                Log.d("EditProfileData",user.toString())
-                viewModel.updateUserData(user)
+                viewModel.updateUserData(nome,cognome)
                 navController.popBackStack(route = "Profile", inclusive = false)
             },
             modifier = Modifier.fillMaxWidth().padding(start = 50.dp, end = 50.dp).height(60.dp),

@@ -25,11 +25,12 @@ class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository)
         }
     }
 
-    fun updateUserData(user: UpdateNameData){
+    fun updateUserData(nome : String, cognome : String){
         viewModelScope.launch {
             try {
+                val user = UpdateNameData(nome, cognome)
                 gestioneAccountRepository.updateUserName(user)
-                Log.d("ProfileViewModel","Modifica dei dati...")
+                Log.d("ProfileViewModel","Modifica dei dati...${user}")
                 getUserData()
             }catch (e: Exception){
                 Log.d("ProfileViewModel","Error: ${e.message}")
