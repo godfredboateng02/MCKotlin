@@ -1,4 +1,4 @@
-/*package com.example.prova4.screens
+package com.example.prova3.screens
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -25,15 +25,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.NavController
+import com.example.prova3.repository.GestioneAccountRepository
+import com.example.prova3.viewmodel.EditCardViewModel
 
-@Preview
+
 @Composable
-fun EditProfileCard(){
+fun EditProfileCard(navController: NavController, gestioneAccountRepository: GestioneAccountRepository){
     var fullName by rememberSaveable { mutableStateOf("") }
     var number by rememberSaveable { mutableStateOf("") }
+    var expireMonth by rememberSaveable { mutableStateOf<Int>(0) }
+    var expireMonthString by rememberSaveable { mutableStateOf("") }
+    var expireYear by rememberSaveable { mutableStateOf<Int>(0) }
+    var expireYearString by rememberSaveable { mutableStateOf("") }
+    var cvv by rememberSaveable { mutableStateOf<String>("") }
+    var cvvString by rememberSaveable { mutableStateOf("") }
+
+    val factory = viewModelFactory {
+        initializer {
+            EditCardViewModel(gestioneAccountRepository)
+        }
+    }
+    val viewModel: EditCardViewModel = viewModel(factory = factory)
 
     Column (
         modifier = Modifier.fillMaxSize()
@@ -95,9 +113,9 @@ fun EditProfileCard(){
 
                 Row {
                     OutlinedTextField(
-                        value = number,
+                        value = expireMonthString,
                         onValueChange = {
-                            number = it
+                            expireMonthString = it
                         },
                         placeholder = {Text("mm")},
                         singleLine = true,
@@ -108,9 +126,9 @@ fun EditProfileCard(){
                     Spacer(Modifier.width(10.dp))
 
                     OutlinedTextField(
-                        value = number,
+                        value = expireYearString,
                         onValueChange = {
-                            number = it
+                            expireYearString = it
                         },
                         placeholder = {Text("YYYY")},
                         singleLine = true,
@@ -127,9 +145,9 @@ fun EditProfileCard(){
 
                 Row {
                     OutlinedTextField(
-                        value = number,
+                        value = cvvString,
                         onValueChange = {
-                            number = it
+                            cvvString = it
                         },
                         placeholder = {Text("123")},
                         singleLine = true,
@@ -147,7 +165,13 @@ fun EditProfileCard(){
         Spacer(Modifier.height(50.dp))
 
         Button(
-            onClick = {Log.d("EditProfileData","Modifica dei dati... $fullName $number")},
+            onClick = {
+                expireMonth = expireMonthString.toInt()
+                expireYear = expireYearString.toInt()
+                viewModel.updateCardData(fullName, number, expireMonth, expireYear, cvv)
+                Log.d("EditProfileCard","${expireMonth} ${expireYear} ${cvv}")
+                navController.popBackStack(route = "Profile", inclusive = false)
+            },
             modifier = Modifier.fillMaxWidth().padding(start = 50.dp, end = 50.dp).height(60.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xff009436))
         ) {
@@ -165,4 +189,4 @@ private val titoloStyle = TextStyle(
 private val CognomeStyle = TextStyle(
     fontSize = 20.sp,
     fontWeight = FontWeight.Medium,
-)*/
+)

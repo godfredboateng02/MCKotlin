@@ -1,4 +1,4 @@
-package com.example.prova4.screens
+package com.example.prova3.screens
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import com.example.prova3.repository.GestioneAccountRepository
 import com.example.prova3.repository.GestioneAccountRepository.UpdateNameData
+import com.example.prova3.viewmodel.EditProfileViewModel
 import com.example.prova3.viewmodel.ProfileViewModel
 
 @Composable
@@ -40,10 +41,10 @@ fun EditProfileData(navController: NavController, gestioneAccountRepository: Ges
 
     val factory = viewModelFactory {
         initializer {
-            ProfileViewModel(gestioneAccountRepository)
+            EditProfileViewModel(gestioneAccountRepository)
         }
     }
-    val viewModel: ProfileViewModel = viewModel(key = "profileViewData" , factory = factory)
+    val viewModel: EditProfileViewModel = viewModel(factory = factory)
 
 
     Column (

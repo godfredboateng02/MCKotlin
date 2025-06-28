@@ -2,6 +2,7 @@
 package com.example.prova3.repository
 
 import com.example.prova3.model.CommunicationController
+import com.example.prova3.model.LastOrderMenu
 import com.example.prova3.model.Location
 import com.example.prova3.model.Storage
 
@@ -15,19 +16,11 @@ class GestioneOrdiniRepository {
         val tempo: Any // FormattazioneRepository.TimeData o Int (per tempo rimanente)
     )
 
-    data class LastOrderMenu(
-        val nome: String,
-        val prezzo: String,
-        val descrizione: String,
-        val immagine: String
-    )
 
-    // Equivalente di consegnaInCorso() dal JavaScript
     suspend fun consegnaInCorso(): Boolean {
         return Storage.inConsegna()
     }
 
-    // Equivalente di effettuaOrdine() dal JavaScript
     suspend fun effettuaOrdine(mid: Int): OrderStatus? {
         return try {
             Storage.setConsegna(true)
@@ -51,7 +44,6 @@ class GestioneOrdiniRepository {
         }
     }
 
-    // Equivalente di lastOrderMenu() dal JavaScript
     suspend fun lastOrderMenu(): LastOrderMenu? {
         val mid = Storage.getMid() ?: return null
 
@@ -101,7 +93,6 @@ class GestioneOrdiniRepository {
         }
     }
 
-    // Equivalente di confermaConsegna() dal JavaScript
     suspend fun confermaConsegna() {
         Storage.setConsegna(false)
     }

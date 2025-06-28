@@ -17,9 +17,10 @@ import com.example.prova3.model.Storage
 import com.example.prova3.repository.GestioneAccountRepository
 import com.example.prova3.repository.GestioneMenuRepository
 import com.example.prova3.repository.GestioneOrdiniRepository
+import com.example.prova3.screens.EditProfileCard
 import com.example.prova3.screens.Homepage
 import com.example.prova3.screens.Profile
-import com.example.prova4.screens.EditProfileData
+import com.example.prova3.screens.EditProfileData
 
 
 class MainActivity : ComponentActivity() {
@@ -63,11 +64,14 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable( route = "Profile"){
-                    Profile(navController, gestioneAccountRepository)
+                    Profile(navController, gestioneAccountRepository, gestioneOrdiniRepository)
                 }
 
                 composable ( route = "EditProfileData") {
                     EditProfileData(navController, gestioneAccountRepository)
+                }
+                composable ( route = "EditProfileCard") {
+                    EditProfileCard(navController, gestioneAccountRepository)
                 }
             }
         }

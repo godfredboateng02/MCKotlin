@@ -20,10 +20,7 @@ class GestioneAccountRepository {
         val anno: Int
     )
 
-    data class UpdateCardData(
-        val carta: CartaData,
-        val cvv: String
-    )
+
 
     data class UpdateNameData(
         val nome: String,
@@ -56,17 +53,17 @@ class GestioneAccountRepository {
     }
 
     // Equivalente di updateUserCard() dal JavaScript
-    suspend fun updateUserCard(cardData: UpdateCardData) {
+    suspend fun updateUserCard(titolare: String, numero: String, mese: Int, anno: Int, cvv : String) {
         val identity = getUserData()
 
         val bodyParams = PutUserInfo(
             firstName = identity?.nome,
             lastName = identity?.cognome,
-            cardFullName = cardData.carta.titolare,
-            cardNumber = cardData.carta.numero,
-            cardExpireMonth = cardData.carta.mese,
-            cardExpireYear = cardData.carta.anno,
-            cardCVV = cardData.cvv,
+            cardFullName = titolare,
+            cardNumber = numero,
+            cardExpireMonth = mese,
+            cardExpireYear = anno,
+            cardCVV = cvv,
             sid = Storage.getSid()
         )
 

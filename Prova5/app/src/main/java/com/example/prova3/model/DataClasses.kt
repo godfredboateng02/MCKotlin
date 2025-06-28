@@ -106,3 +106,10 @@ data class OrderStatus(
     val currentPosition: Location
 
 )
+
+data class LastOrderMenu(
+    val nome: String,
+    val prezzo: String,
+    val descrizione: String,
+    val immagine: String
+)

@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -21,63 +23,77 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.prova3.repository.GestioneAccountRepository.UserData
 
 @Composable
-fun CardElement(navController: NavController){
-    Box(
-        modifier = card.clickable{
-            navController.navigate("EditProfileCard")
-        },
+fun CardElement(navController: NavController, datiUtente: State<UserData?>){
 
-    ){
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(18.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ){
-            //visa
-            Text("Visa",style = visaTextStyle, modifier = Modifier.padding(bottom = 30.dp))
-            //riga 1
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+    if (datiUtente.value != null){
+        Box(
+            modifier = card.clickable{
+                navController.navigate("EditProfileCard")
+            },
+
             ){
-                Column {
-                    Text("Card number", style = cardTextStyle)
-                    Text("**** **** **** 1234", style = cardNumberStyle)
-                }
-
-                Column {
-                    Text("CVV", style = cardTextStyle)
-                    Text("* * *", style = cardTextStyle)
-                }
-
-            }
-
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(18.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ){
-                //Riga 2
-                Column {
-                    Text("Expire Date",style = cardTextStyle)
-                    Text("12/2027",style = cardExpireDate)
+                //visa
+                Text("Visa",style = visaTextStyle, modifier = Modifier.padding(bottom = 30.dp))
+                //riga 1
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Column {
+                        Text("Card number", style = cardTextStyle)
+                        Text("**** **** **** ${datiUtente.value?.carta?.numero.toString()}", style = cardNumberStyle)
+                    }
+
+                    Column {
+                        Text("CVV", style = cardTextStyle)
+                        Text("* * *", style = cardTextStyle)
+                    }
+
                 }
 
-                Column {
-                    Text("Boateng Godfred",style = cardTextStyle)
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    //Riga 2
+                    Column {
+                        Text("Expire Date",style = cardTextStyle)
+                        Text("${datiUtente.value?.carta?.mese.toString()}/${datiUtente.value?.carta?.anno.toString()}",style = cardExpireDate)
+                    }
+
+                    Column {
+                        Text(datiUtente.value?.carta?.titolare.toString(),style = cardTextStyle)
+                    }
                 }
             }
         }
+    }else {
+
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Nessuna carta inserita")
+        }
     }
+
+
 }
 
 private val card = Modifier
     .size(360.dp, 208.dp)
     .clip(RoundedCornerShape(16.dp))
     .background(Color(0xFF3A9DE9))
-    .clickable(onClick = {Log.d("Profile","Carta di credito")})
+    .clickable(onClick = { Log.d("Profile", "Carta di credito") })
 
 val cardTextStyle = TextStyle(
     color = Color(0XFFFFFFFF)
