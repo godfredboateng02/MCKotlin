@@ -7,11 +7,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.getValue
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.prova3.model.CommunicationController
+import androidx.navigation.navArgument
 import com.example.prova3.model.LocationManager
 import com.example.prova3.model.Storage
 import com.example.prova3.repository.GestioneAccountRepository
@@ -24,7 +27,9 @@ import com.example.prova3.screens.EditProfileData
 import com.example.prova3.screens.FirstScreen
 import com.example.prova3.screens.LoadingScreen
 import com.example.prova3.screens.MenuDetail
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -44,7 +49,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -62,6 +66,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
+            // Osserva la route corrente e salvala nel companion object
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            currentRoute = navBackStackEntry?.destination?.route
+
             NavHost(navController, "LoadingScreen") {
                 composable(route = "FirstScreen") {
                     FirstScreen(navController, gestioneAccountRepository)
@@ -69,23 +77,37 @@ class MainActivity : ComponentActivity() {
                 composable( route = "Homepage"){
                     Homepage(navController, gestioneMenuRepository)
                 }
-
                 composable( route = "Profile"){
                     Profile(navController, gestioneAccountRepository, gestioneOrdiniRepository)
                 }
-
                 composable( route = "EditProfileData") {
                     EditProfileData(navController, gestioneAccountRepository)
                 }
                 composable( route = "EditProfileCard") {
                     EditProfileCard(navController, gestioneAccountRepository)
                 }
-                composable(route = "MenuDetail") {
-                    MenuDetail(navController, gestioneMenuRepository,56)
+                composable(
+                    route = "MenuDetail/{mid}",
+                    arguments = listOf(navArgument("mid") { type = NavType.IntType })
+                ) { backStackEntry ->
+                    val mid = backStackEntry.arguments?.getInt("mid") ?: 0
+                    MenuDetail(navController, gestioneMenuRepository, mid)
                 }
                 composable(route = "LoadingScreen") {
                     LoadingScreen(navController)
                 }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        // Salva la route corrente quando l'app va in pausa
+        CoroutineScope(Dispatchers.IO).launch {
+            currentRoute?.let { route ->
+                Storage.setPagina(route)
+                println("Route salvata in onPause: $route")
             }
         }
     }
@@ -104,5 +126,10 @@ class MainActivity : ComponentActivity() {
                 )
             )
         }
+    }
+
+    companion object {
+        // Variabile statica per tenere traccia della route corrente
+        var currentRoute: String? = null
     }
 }
