@@ -35,19 +35,12 @@ fun MenuElement(menu: MenuListItem, navController: NavController,){
     Box(modifier = box
         .clickable {
             Log.d("MenuElement", "main")
-            navController.navigate("MenuDetail")
+            navController.navigate("MenuDetail/${menu.mid}")
         }
     ){
         Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
 
-            /*Image(
-                painter = painterResource(id = R.drawable.cibo),
-                contentDescription = "Immagine di un menu",
-                contentScale = ContentScale.Crop,
-                modifier = image,
-            )
 
-            MenuImageView(56)*/
 
 
             MenuImageView(

@@ -4,6 +4,7 @@ package com.example.prova3.repository
 import com.example.prova3.model.CommunicationController
 import com.example.prova3.model.PutUserInfo
 import com.example.prova3.model.Storage
+import com.example.prova3.model.TimeData
 
 class GestioneAccountRepository {
 
@@ -89,7 +90,7 @@ class GestioneAccountRepository {
     }
 
     // Equivalente di lastOrderTime() dal JavaScript
-    suspend fun lastOrderTime(): FormattazioneRepository.TimeData? {
+    suspend fun lastOrderTime(): TimeData? {
         println("entrato in lastOrderTime")
 
         return try {

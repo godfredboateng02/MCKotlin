@@ -31,22 +31,24 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import com.example.prova3.R
+import com.example.prova3.repository.GestioneAccountRepository
 import com.example.prova3.repository.GestioneMenuRepository
+import com.example.prova3.repository.GestioneOrdiniRepository
 import com.example.prova3.viewmodel.MenuDetailViewModel
 
 @Composable
-fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMenuRepository, mid: Int){
+fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMenuRepository, gestioneAccountRepository: GestioneAccountRepository, gestioneOrdiniRepository: GestioneOrdiniRepository, mid : Int){
 
     val factory = viewModelFactory {
         initializer {
-            MenuDetailViewModel(gestioneMenuRepository)
+            MenuDetailViewModel(gestioneMenuRepository,gestioneAccountRepository,gestioneOrdiniRepository)
         }
     }
     val viewModel: MenuDetailViewModel = viewModel(factory = factory)
     val menuDettaglio = viewModel.menuDetail.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getMenuDetail(56)
+        viewModel.getMenuDetail(mid)
     }
 
     Column (

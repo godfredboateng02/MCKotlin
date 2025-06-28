@@ -30,7 +30,7 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
     var orderStatus : StateFlow<OrderStatus?> = _orderStatus
 
 
-    private fun hasCard() : Boolean{
+    private fun hasCard(){
         viewModelScope.launch {
             try {
                 val result  = gestioneAccountRepository.getUserData()
@@ -43,21 +43,12 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
                 Log.d("MenuDetailViewModel","Error: ${e.message}")
             }
         }
-        return true
     }
 
     private fun hasOrder(){
         viewModelScope.launch {
-            try {
-                val result = gestioneOrdiniRepository.orderStatus()
-                if (result?.stato == "ON_DELIVERY"){
-                    _hasOrder.value = true
-                }else{
-                    _hasOrder.value = false
-                }
-            }catch(e : Exception){
-                Log.d("MenuDetailViewModel","Error: ${e.message}")
-            }
+            _hasOrder.value = gestioneOrdiniRepository.consegnaInCorso()
+
         }
     }
 
@@ -65,7 +56,7 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
         viewModelScope.launch {
             try {
                 _isLoading.value = true
-                _menuDetail.value = gestioneMenuRepository.menuDetail(56)
+                _menuDetail.value = gestioneMenuRepository.menuDetail(mid)
                 Log.d("MenuDetailViewModel","mid 56 ${menuDetail.value.toString()}")
                 _isLoading.value = false
             }catch (e: Exception){
@@ -81,12 +72,11 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
 
     fun buyMenu(mid : Int){
         viewModelScope.launch {
-            if (_hasCard.value == true && _hasOrder.value == false){
+            if (_hasCard.value && !_hasOrder.value){
                 try {
-                    //_orderStatus.value = gestioneOrdiniRepository.effettuaOrdine(mid)
+                    gestioneOrdiniRepository.effettuaOrdine(mid)
                 }catch(e : Exception){
                     Log.d("MenuDetailsViewModel","Error: ${e.message}")
-                    _isLoading.value = false
                 }
             }
 

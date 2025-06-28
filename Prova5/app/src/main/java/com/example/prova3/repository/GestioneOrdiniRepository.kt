@@ -1,19 +1,22 @@
 // GestioneOrdiniRepository.kt
 package com.example.prova3.repository
 
+import androidx.collection.floatObjectMapOf
 import com.example.prova3.model.CommunicationController
 import com.example.prova3.model.LastOrderMenu
 import com.example.prova3.model.Location
 import com.example.prova3.model.Storage
+import com.example.prova3.model.TimeData
 
 class GestioneOrdiniRepository {
 
-    data class OrderStatus(
+    data class OrderStatusCompact(
         val stato: String,
         val partenza: Location?,
         val destinazione: Location,
         val drone: Location,
-        val tempo: Any // FormattazioneRepository.TimeData o Int (per tempo rimanente)
+        val tempoRimanente: Int?, // FormattazioneRepository.TimeData o Int (per tempo rimanente)
+        val orarioConsegna : TimeData?
     )
 
 
@@ -21,26 +24,24 @@ class GestioneOrdiniRepository {
         return Storage.inConsegna()
     }
 
-    suspend fun effettuaOrdine(mid: Int): OrderStatus? {
-        return try {
+    suspend fun effettuaOrdine(mid: Int) {
+            try {
             Storage.setConsegna(true)
             println("Acquisto effettuato")
 
             val ordine = CommunicationController.postOrder(mid)
             if (ordine == null) {
                 Storage.setConsegna(false)
-                return null
             }
 
             Storage.setRistorante(mid)
-            Storage.setOid(ordine.oid)
+            Storage.setOid(ordine?.oid ?: -1)
             Storage.setMid(mid)
 
             orderStatus()
         } catch (error: Exception) {
             println("errore in effettuaOrdine: $error")
             Storage.setConsegna(false)
-            null
         }
     }
 
@@ -59,37 +60,37 @@ class GestioneOrdiniRepository {
     }
 
     // Equivalente di orderStatus() dal JavaScript
-    suspend fun orderStatus(): OrderStatus? {
-        return try {
+    suspend fun orderStatus(): OrderStatusCompact? {
+        try {
             val oid = Storage.getOid()
             println("PRE-->: $oid")
-            if (oid == null) return null
+            if (oid == null) {
+                return null
+            }
 
             val raw = CommunicationController.getOrderStatus(oid)
             println("POST orderstatus: $raw")
-            if (raw == null) return null
-
-            val formattazione = FormattazioneRepository()
-            val tempo = if (raw.status == "ON_DELIVERY") {
-                raw.expectedDeliveryTimestamp?.let {
-                    formattazione.tempoRimanente(it)
-                } ?: 0
-            } else {
-                raw.deliveryTimestamp?.let {
-                    formattazione.extractTime(it)
-                }
+            if (raw == null) {
+                return null
             }
 
-            OrderStatus(
+            val formattazione = FormattazioneRepository()
+            val tempoRimanente = formattazione.tempoRimanente(raw.expectedDeliveryTimestamp)
+            val orarioConsegna = formattazione.extractTime(raw.deliveryTimestamp)
+
+
+
+            return OrderStatusCompact(
                 stato = raw.status,
                 partenza = Storage.getRistorante(),
                 destinazione = raw.deliveryLocation,
                 drone = raw.currentPosition,
-                tempo = tempo ?: 0
+                tempoRimanente = tempoRimanente,
+                orarioConsegna = orarioConsegna
             )
         } catch (error: Exception) {
             println("errore in orderStatus: $error")
-            null
+            return null
         }
     }
 

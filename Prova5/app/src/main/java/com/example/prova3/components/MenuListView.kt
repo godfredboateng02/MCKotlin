@@ -20,30 +20,7 @@ import com.example.prova4.components.MenuElement
 @Composable
 fun MenuListView(l :List<MenuListItem>, navController: NavController){
 
-    //val list = l ?: emptyList()
 
-    /*val rows: List<List<Menu>> = list.orEmpty().chunked(2)
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(rows) { pair ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
-            ) {
-                pair.forEach { menu ->
-                    MenuElement(menu)
-                }
-                // se la riga ha un solo elemento, aggiungo uno Spacer “placeholder”:
-                if (pair.size == 1) {
-                    Spacer(Modifier.weight(1f))
-                }
-            }
-        }
-    }*/
     val rows: List<List<MenuListItem>> = l.chunked(2)
 
     LazyColumn(

@@ -1,18 +1,17 @@
 package com.example.prova3.repository
 
+import com.example.prova3.model.TimeData
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 class FormattazioneRepository {
 
-    data class TimeData(
-        val data: String,
-        val ora: String
-    )
-
     // Equivalente di extractTime() dal JavaScript
-    fun extractTime(stringa: String): TimeData {
+    fun extractTime(stringa: String?): TimeData? {
+        if (stringa == null){
+            return null
+        }
         val dateTime = LocalDateTime.parse(stringa.replace(" ", "T"))
 
         val dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ITALIAN)
@@ -30,7 +29,10 @@ class FormattazioneRepository {
     }
 
     // Equivalente di tempoRimanente() dal JavaScript
-    fun tempoRimanente(expectedTime: String): Int {
+    fun tempoRimanente(expectedTime: String?): Int? {
+        if (expectedTime == null){
+            return null
+        }
         val expectedDateTime = LocalDateTime.parse(expectedTime.replace(" ", "T"))
         val now = LocalDateTime.now()
 

@@ -129,3 +129,8 @@ data class MenuListItem(
     val tempo: Int,
     val immagine: String
 )
+
+data class TimeData(
+    val data: String,
+    val ora: String
+)

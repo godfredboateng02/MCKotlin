@@ -91,7 +91,7 @@ class MainActivity : ComponentActivity() {
                     arguments = listOf(navArgument("mid") { type = NavType.IntType })
                 ) { backStackEntry ->
                     val mid = backStackEntry.arguments?.getInt("mid") ?: 0
-                    MenuDetail(navController, gestioneMenuRepository, mid)
+                    MenuDetail(navController, gestioneMenuRepository, gestioneAccountRepository,gestioneOrdiniRepository, mid)
                 }
                 composable(route = "LoadingScreen") {
                     LoadingScreen(navController)
