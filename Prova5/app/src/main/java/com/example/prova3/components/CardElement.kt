@@ -26,9 +26,9 @@ import androidx.navigation.NavController
 import com.example.prova3.repository.GestioneAccountRepository.UserData
 
 @Composable
-fun CardElement(navController: NavController, datiUtente: State<UserData?>){
+fun CardElement(navController: NavController, datiUtente: UserData?){
 
-    if (datiUtente.value != null){
+    if (datiUtente?.carta != null){
         Box(
             modifier = card.clickable{
                 navController.navigate("EditProfileCard")
@@ -50,7 +50,7 @@ fun CardElement(navController: NavController, datiUtente: State<UserData?>){
                 ){
                     Column {
                         Text("Card number", style = cardTextStyle)
-                        Text("**** **** **** ${datiUtente.value?.carta?.numero.toString()}", style = cardNumberStyle)
+                        Text("**** **** **** ${datiUtente.carta?.numero.toString()}", style = cardNumberStyle)
                     }
 
                     Column {
@@ -67,11 +67,11 @@ fun CardElement(navController: NavController, datiUtente: State<UserData?>){
                     //Riga 2
                     Column {
                         Text("Expire Date",style = cardTextStyle)
-                        Text("${datiUtente.value?.carta?.mese.toString()}/${datiUtente.value?.carta?.anno.toString()}",style = cardExpireDate)
+                        Text("${datiUtente.carta?.mese.toString()}/${datiUtente.carta?.anno.toString()}",style = cardExpireDate)
                     }
 
                     Column {
-                        Text(datiUtente.value?.carta?.titolare.toString(),style = cardTextStyle)
+                        Text(datiUtente.carta?.titolare.toString(),style = cardTextStyle)
                     }
                 }
             }

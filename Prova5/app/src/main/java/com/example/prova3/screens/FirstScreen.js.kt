@@ -1,4 +1,4 @@
-/*package com.example.prova4.screens
+package com.example.prova3.screens
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -27,10 +27,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.prova3.repository.GestioneAccountRepository
 
 
 @Composable
-fun FirstScreen(navController: NavController){
+fun FirstScreen(navController: NavController, gestioneAccountRepository: GestioneAccountRepository){
     var cognome by rememberSaveable { mutableStateOf("") }
     var nome by rememberSaveable { mutableStateOf("") }
 
@@ -109,4 +110,4 @@ private val titoloStyle = TextStyle(
 private val CognomeStyle = TextStyle(
     fontSize = 20.sp,
     fontWeight = FontWeight.Medium,
-)*/
+)

@@ -107,7 +107,7 @@ fun Profile(navController: NavController, gestioneAccountRepository: GestioneAcc
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                CardElement(navController, datiUtente)
+                CardElement(navController, datiUtente.value)
             }
 
 

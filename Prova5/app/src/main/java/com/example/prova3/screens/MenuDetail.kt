@@ -1,4 +1,5 @@
-/*
+package com.example.prova3.screens
+
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,20 +24,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.prova4.R
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.NavController
+import com.example.prova3.R
+import com.example.prova3.repository.GestioneMenuRepository
+import com.example.prova3.viewmodel.MenuDetailViewModel
 
-val titolo = "Sushi Giapponese"
-val descrizioneLunga = "Assortimento elegante di nigiri lucidi, maki arrotolati con precisione, sashimi di tonno rosso vivo e salmone vellutato, decorato con wasabi pungente, zenzero rosa, alghe croccanti; profumo di riso tiepido e aceto, armonia di colori, texture, sapori marini freschi intensi raffinati"
-val prezzo = "10,99€"
-val distnce = "4 min"
-
-
-@Preview
 @Composable
-fun MenuDetails (na){
+fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMenuRepository, mid: Int){
+
+    val factory = viewModelFactory {
+        initializer {
+            MenuDetailViewModel(gestioneMenuRepository)
+        }
+    }
+    val viewModel: MenuDetailViewModel = viewModel(factory = factory)
+    val menuDettaglio = viewModel.menuDetail.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getMenuDetail(56)
+    }
+
     Column (
         modifier = Modifier
             .fillMaxSize(),
@@ -49,6 +63,8 @@ fun MenuDetails (na){
             modifier = image,
         )
 
+        Log.d("MenuDetail",menuDettaglio.value.toString())
+
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -59,13 +75,14 @@ fun MenuDetails (na){
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ){
-                Text(titolo, style = titoloStyle, modifier = titoloModifier)
+                Text(menuDettaglio.value?.nome.toString(), style = titoloStyle, modifier = titoloModifier)
+
 
                 //Descrizione breve
                 Text("Descrizione Completa", style = descrizioneStyle)
 
                 //Descrizionelunga
-                Text(descrizioneLunga, style = descrizioneLungaStyle)
+                Text(menuDettaglio.value?.descrizione.toString(), style = descrizioneLungaStyle)
 
                 //Prezzo
                 Text("10,99€", style = priceStyle, modifier = priceModifier)
@@ -138,4 +155,3 @@ private val headerStyle = TextStyle(
     fontWeight = FontWeight.Medium,
     color = Color(0xffffffff)
 )
-*/

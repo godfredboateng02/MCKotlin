@@ -1,47 +1,71 @@
-/*
+package com.example.prova3.components
+
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.prova4.components.Menu
+import com.example.prova3.model.MenuListItem
 import com.example.prova4.components.MenuElement
 
+
 @Composable
-fun MenuListView(navController: NavController) {
+fun MenuListView(l :List<MenuListItem>, navController: NavController){
+
+    //val list = l ?: emptyList()
+
+    /*val rows: List<List<Menu>> = list.orEmpty().chunked(2)
+
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items((1..10).toList().chunked(2)) { rowItems ->
+        items(rows) { pair ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
             ) {
-                for (i in rowItems) {
-                    MenuElement(
-                        menu = Menu(
-                            nome = "Titolo $i",
-                            descrizione = "Descrizione $i",
-                            prezzo = 10f + i,
-                            distanza = "${10 + i} min"
-                        ),
-                        navController
-                    )
+                pair.forEach { menu ->
+                    MenuElement(menu)
                 }
-
-                if (rowItems.size == 1) {
-                    Spacer(modifier = Modifier.size(187.dp, 260.dp))
+                // se la riga ha un solo elemento, aggiungo uno Spacer “placeholder”:
+                if (pair.size == 1) {
+                    Spacer(Modifier.weight(1f))
                 }
             }
         }
+    }*/
+    val rows: List<List<MenuListItem>> = l.chunked(2)
+
+    LazyColumn(
+        Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy (16.dp)
+    ) {
+        items(rows){pair ->
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
+            ){
+                pair.forEach { menu ->
+                    MenuElement(menu, navController)
+                }
+                // se la riga ha un solo elemento, aggiungo uno Spacer “placeholder”:
+                if (pair.size == 1) {
+                    Spacer(Modifier.weight(1f))
+                }
+            }
+
+        }
     }
+
 }
-*/

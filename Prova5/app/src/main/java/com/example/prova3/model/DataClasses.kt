@@ -113,3 +113,19 @@ data class LastOrderMenu(
     val descrizione: String,
     val immagine: String
 )
+data class MenuDetailData(
+    val nome: String,
+    val prezzo: String,
+    val descrizione: String,
+    val tempo: Int,
+    val immagine: String
+)
+
+data class MenuListItem(
+    val mid: Int,
+    val nome: String,
+    val descrizione: String,
+    val prezzo: String,
+    val tempo: Int,
+    val immagine: String
+)

@@ -44,7 +44,6 @@ fun EditProfileCard(navController: NavController, gestioneAccountRepository: Ges
     var expireYear by rememberSaveable { mutableStateOf<Int>(0) }
     var expireYearString by rememberSaveable { mutableStateOf("") }
     var cvv by rememberSaveable { mutableStateOf<String>("") }
-    var cvvString by rememberSaveable { mutableStateOf("") }
 
     val factory = viewModelFactory {
         initializer {
@@ -145,9 +144,9 @@ fun EditProfileCard(navController: NavController, gestioneAccountRepository: Ges
 
                 Row {
                     OutlinedTextField(
-                        value = cvvString,
+                        value = cvv,
                         onValueChange = {
-                            cvvString = it
+                            cvv = it
                         },
                         placeholder = {Text("123")},
                         singleLine = true,

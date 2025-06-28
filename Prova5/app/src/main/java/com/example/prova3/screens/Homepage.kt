@@ -12,11 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,10 +31,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
-import com.example.prova3.MenuListView
+import com.example.prova3.components.MenuListView
 import com.example.prova3.R
 import com.example.prova3.repository.GestioneMenuRepository
-import com.example.prova3.repository.GestioneOrdiniRepository
 import com.example.prova3.viewmodel.HomepageViewModel
 
 @Composable
@@ -47,36 +47,48 @@ fun Homepage(navController: NavController,gestioneMenuRepository: GestioneMenuRe
     val viewModel: HomepageViewModel = viewModel(factory = factory)
     val listaMenu = viewModel.listaMenu.collectAsState()
 
+    val isLoading = viewModel.isLoading.collectAsState()
+
 
     LaunchedEffect(Unit) {
+        //spinning wheel
         viewModel.getListaMenu()
     }
-    Column(
-        Modifier.fillMaxSize(),
-    ){
-        Box(
-            Modifier.fillMaxWidth().height(120.dp),
+
+    if (isLoading.value == false){
+        Column(
+            Modifier.fillMaxSize(),
         ){
-            Row (
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            Box(
+                Modifier.fillMaxWidth().height(120.dp),
             ){
-                Text("I nostri menu", Modifier.padding(top = 50.dp, start = 16.dp),style=TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF7300)))
-                Image(
-                    painter = painterResource(R.drawable.logo),
-                    contentDescription = "Logo",
-                    modifier = Modifier.padding(top=45.dp, end = 20.dp).size(70.dp).clip(CircleShape).padding().clickable{
-                        navController.navigate("Profile")
-                    },
-                    contentScale = ContentScale.Crop,
-                )
+                Row (
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Text("I nostri menu", Modifier.padding(top = 50.dp, start = 16.dp),style=TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF7300)))
+                    Image(
+                        painter = painterResource(R.drawable.logo),
+                        contentDescription = "Logo",
+                        modifier = Modifier.padding(top=45.dp, end = 20.dp).size(70.dp).clip(CircleShape).padding().clickable{
+                            navController.navigate("Profile")
+                        },
+                        contentScale = ContentScale.Crop,
+                    )
+                }
             }
-        }
-        Box(){
-            listaMenu.value?.let {
-                MenuListView(it)
+            Box(){
+                listaMenu.value?.let {
+                    MenuListView(it, navController)
+                }
             }
+            //MenuListView()
         }
-        //MenuListView()
+    }else{
+        Column (Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+            CircularProgressIndicator()
+        }
     }
+
+
 }

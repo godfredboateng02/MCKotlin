@@ -21,6 +21,8 @@ import com.example.prova3.screens.EditProfileCard
 import com.example.prova3.screens.Homepage
 import com.example.prova3.screens.Profile
 import com.example.prova3.screens.EditProfileData
+import com.example.prova3.screens.FirstScreen
+import com.example.prova3.screens.MenuDetail
 
 
 class MainActivity : ComponentActivity() {
@@ -58,7 +60,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
-            NavHost(navController, "Homepage") {
+            NavHost(navController, "FirstScreen") {
+                composable(route = "FirstScreen") {
+                    FirstScreen(navController, gestioneAccountRepository)
+                }
                 composable( route = "Homepage"){
                     Homepage(navController, gestioneMenuRepository)
                 }
@@ -72,6 +77,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable ( route = "EditProfileCard") {
                     EditProfileCard(navController, gestioneAccountRepository)
+                }
+                composable (route = "MenuDetail") {
+                    MenuDetail(navController, gestioneMenuRepository,56)
                 }
             }
         }
