@@ -45,7 +45,7 @@ fun Profile(navController: NavController, gestioneAccountRepository: GestioneAcc
             ProfileViewModel(gestioneAccountRepository)
         }
     }
-    val viewModel: ProfileViewModel = viewModel(factory = factory)
+    val viewModel: ProfileViewModel = viewModel(key= "profileViewModel",factory = factory)
     val datiUtente = viewModel.datiUtente.collectAsState()
 
     LaunchedEffect(Unit) {

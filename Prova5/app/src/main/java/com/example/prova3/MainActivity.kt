@@ -33,10 +33,6 @@ class MainActivity : ComponentActivity() {
                 // Permesso fine location concesso
                 println("Permesso FINE_LOCATION concesso")
             }
-            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                // Solo permesso coarse location concesso
-                println("Permesso COARSE_LOCATION concesso")
-            }
             else -> {
                 // Nessun permesso concesso
                 println("Nessun permesso di posizione concesso")
@@ -50,8 +46,6 @@ class MainActivity : ComponentActivity() {
         // Inizializza i singleton
         Storage.initialize(this)
         LocationManager.initialize(this)
-        CommunicationController.initialize(this)
-
         // Controlla e richiedi i permessi
         checkAndRequestLocationPermissions()
 
@@ -84,18 +78,12 @@ class MainActivity : ComponentActivity() {
             this,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
-        val coarseLocationPermission = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
 
-        if (fineLocationPermission != PackageManager.PERMISSION_GRANTED &&
-            coarseLocationPermission != PackageManager.PERMISSION_GRANTED) {
+        if (fineLocationPermission != PackageManager.PERMISSION_GRANTED ) {
             // Richiedi i permessi
             locationPermissionRequest.launch(
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
                 )
             )
         }

@@ -43,7 +43,7 @@ fun EditProfileData(navController: NavController, gestioneAccountRepository: Ges
             ProfileViewModel(gestioneAccountRepository)
         }
     }
-    val viewModel: ProfileViewModel = viewModel(factory = factory)
+    val viewModel: ProfileViewModel = viewModel(key = "profileViewData" , factory = factory)
 
 
     Column (

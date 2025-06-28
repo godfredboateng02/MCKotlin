@@ -30,6 +30,7 @@ class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository)
             try {
                 gestioneAccountRepository.updateUserName(user)
                 Log.d("ProfileViewModel","Modifica dei dati...")
+                getUserData()
             }catch (e: Exception){
                 Log.d("ProfileViewModel","Error: ${e.message}")
             }

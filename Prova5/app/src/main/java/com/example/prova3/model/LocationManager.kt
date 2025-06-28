@@ -42,11 +42,7 @@ object LocationManager {
         return ActivityCompat.checkSelfPermission(
             appContext,
             Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(
-                    appContext,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     // Equivalente di getCurrentPosition() del JavaScript

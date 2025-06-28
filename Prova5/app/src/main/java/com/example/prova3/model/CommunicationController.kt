@@ -25,12 +25,6 @@ object CommunicationController {
     private val BASE_URL = "https://develop.ewlab.di.unimi.it/mc/2425"
     private val TAG = CommunicationController::class.simpleName
 
-    // SOLO per LocationManager, serve context una volta
-    private lateinit var appContext: Context
-
-    fun initialize(context: Context) {
-        appContext = context.applicationContext
-    }
 
     private val client = HttpClient(Android) {
         install(ContentNegotiation) {
