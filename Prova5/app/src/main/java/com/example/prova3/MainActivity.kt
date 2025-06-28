@@ -22,6 +22,7 @@ import com.example.prova3.screens.Homepage
 import com.example.prova3.screens.Profile
 import com.example.prova3.screens.EditProfileData
 import com.example.prova3.screens.FirstScreen
+import com.example.prova3.screens.LoadingScreen
 import com.example.prova3.screens.MenuDetail
 
 
@@ -43,6 +44,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,7 +62,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
-            NavHost(navController, "FirstScreen") {
+            NavHost(navController, "LoadingScreen") {
                 composable(route = "FirstScreen") {
                     FirstScreen(navController, gestioneAccountRepository)
                 }
@@ -72,14 +74,17 @@ class MainActivity : ComponentActivity() {
                     Profile(navController, gestioneAccountRepository, gestioneOrdiniRepository)
                 }
 
-                composable ( route = "EditProfileData") {
+                composable( route = "EditProfileData") {
                     EditProfileData(navController, gestioneAccountRepository)
                 }
-                composable ( route = "EditProfileCard") {
+                composable( route = "EditProfileCard") {
                     EditProfileCard(navController, gestioneAccountRepository)
                 }
-                composable (route = "MenuDetail") {
+                composable(route = "MenuDetail") {
                     MenuDetail(navController, gestioneMenuRepository,56)
+                }
+                composable(route = "LoadingScreen") {
+                    LoadingScreen(navController)
                 }
             }
         }

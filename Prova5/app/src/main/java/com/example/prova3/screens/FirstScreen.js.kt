@@ -26,14 +26,26 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import com.example.prova3.repository.GestioneAccountRepository
+import com.example.prova3.viewmodel.FirstScreenViewModel
+import com.example.prova3.viewmodel.HomepageViewModel
 
 
 @Composable
 fun FirstScreen(navController: NavController, gestioneAccountRepository: GestioneAccountRepository){
     var cognome by rememberSaveable { mutableStateOf("") }
     var nome by rememberSaveable { mutableStateOf("") }
+
+    val factory = viewModelFactory {
+        initializer {
+            FirstScreenViewModel(gestioneAccountRepository)
+        }
+    }
+    val viewModel: FirstScreenViewModel = viewModel(factory = factory)
 
     Column (
         modifier = Modifier.fillMaxSize()
@@ -88,6 +100,7 @@ fun FirstScreen(navController: NavController, gestioneAccountRepository: Gestion
         Button(
             onClick = {
                 Log.d("EditProfileData","Modifica dei dati... $cognome $nome")
+                viewModel.updateUserData(nome,cognome)
                 navController.navigate("Homepage")
             },
             modifier = Modifier.fillMaxWidth().padding(start = 50.dp, end = 50.dp).height(60.dp),
