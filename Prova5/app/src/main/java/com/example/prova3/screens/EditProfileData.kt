@@ -29,8 +29,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
-import com.example.prova3.repository.GestioneAccountRepository
-import com.example.prova3.repository.GestioneAccountRepository.UpdateNameData
+import com.example.prova3.model.repository.GestioneAccountRepository
+import com.example.prova3.model.repository.GestioneAccountRepository.UpdateNameData
 import com.example.prova3.viewmodel.EditProfileViewModel
 import com.example.prova3.viewmodel.ProfileViewModel
 

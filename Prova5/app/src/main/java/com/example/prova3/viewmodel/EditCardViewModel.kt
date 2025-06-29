@@ -3,7 +3,7 @@ package com.example.prova3.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.prova3.repository.GestioneAccountRepository
+import com.example.prova3.model.repository.GestioneAccountRepository
 import kotlinx.coroutines.launch
 
 class EditCardViewModel(val gestioneAccountRepository: GestioneAccountRepository) : ViewModel() {

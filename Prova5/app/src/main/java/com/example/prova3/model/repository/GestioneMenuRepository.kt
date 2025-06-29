@@ -1,9 +1,10 @@
-package com.example.prova3.repository
+package com.example.prova3.model.repository
 
 import com.example.prova3.model.CommunicationController
 import com.example.prova3.model.MenuDetailData
 import com.example.prova3.model.MenuListItem
 import com.example.prova3.model.Storage
+import com.example.prova3.repository.Formattazione
 
 class GestioneMenuRepository {
 
@@ -16,7 +17,7 @@ class GestioneMenuRepository {
         val lista = mutableListOf<MenuListItem>()
 
         for (element in raw) {
-            val immagine = Storage.getImage(element.mid, element.imageVersion)
+            val immagine = Formattazione.formatImage(Storage.getImage(element.mid, element.imageVersion))
             lista.add(
                 MenuListItem(
                     mid = element.mid,
@@ -41,7 +42,7 @@ class GestioneMenuRepository {
             prezzo = String.format("%.2f", raw.price),
             descrizione = raw.longDescription,
             tempo = if (raw.deliveryTime == 0) 1 else raw.deliveryTime,
-            immagine = Storage.getImage(mid, raw.imageVersion)
+            immagine = Formattazione.formatImage(Storage.getImage(mid, raw.imageVersion))
         )
     }
 }

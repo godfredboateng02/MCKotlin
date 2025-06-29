@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.prova3.R
 import com.example.prova3.model.LastOrderMenu
-import com.example.prova3.repository.GestioneOrdiniRepository
+import com.example.prova3.model.repository.GestioneOrdiniRepository
 
 val descrizioneCorta = "Assortimento elegante di nigiri lucidi, maki arrotolati con precisione, sashimi di tonno rosso vivo e salmone vellutato, decorato con wasabi pungente"
 

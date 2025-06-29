@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.prova3.model.LastOrderMenu
-import com.example.prova3.repository.GestioneAccountRepository
-import com.example.prova3.repository.GestioneAccountRepository.UserData
-import com.example.prova3.repository.GestioneOrdiniRepository
+import com.example.prova3.model.repository.GestioneAccountRepository
+import com.example.prova3.model.repository.GestioneAccountRepository.UserData
+import com.example.prova3.model.repository.GestioneOrdiniRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

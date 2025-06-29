@@ -1,10 +1,11 @@
 // GestioneAccountRepository.kt
-package com.example.prova3.repository
+package com.example.prova3.model.repository
 
 import com.example.prova3.model.CommunicationController
 import com.example.prova3.model.PutUserInfo
 import com.example.prova3.model.Storage
 import com.example.prova3.model.TimeData
+import com.example.prova3.repository.Formattazione
 
 class GestioneAccountRepository {
 
@@ -102,8 +103,7 @@ class GestioneAccountRepository {
             println("risposta: $risposta")
             if (risposta == null) return null
 
-            val formattazione = FormattazioneRepository()
-            val timeData = formattazione.extractTime(risposta.creationTimestamp)
+            val timeData = Formattazione.extractTime(risposta.creationTimestamp)
 
             // Conversione formato giorno (come nel JS con dayjs)
             // Per semplicità uso il formato base, puoi aggiungere libreria per date se serve

@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.prova3.repository.GestioneAccountRepository.UserData
+import com.example.prova3.model.repository.GestioneAccountRepository.UserData
 
 @Composable
 fun CardElement(navController: NavController, datiUtente: UserData?){

@@ -33,7 +33,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import com.example.prova3.components.MenuListView
 import com.example.prova3.R
-import com.example.prova3.repository.GestioneMenuRepository
+import com.example.prova3.model.repository.GestioneMenuRepository
 import com.example.prova3.viewmodel.HomepageViewModel
 
 @Composable

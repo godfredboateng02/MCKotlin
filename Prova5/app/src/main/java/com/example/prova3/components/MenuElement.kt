@@ -44,7 +44,7 @@ fun MenuElement(menu: MenuListItem, navController: NavController,){
 
 
             MenuImageView(
-                base64       = menu.immagine,                    // id del menu
+                immagine       = menu.immagine,                    // id del menu
                 modifier  = image.aspectRatio(1f)                     // quadrata; cambia se vuoi
             )
 

@@ -4,8 +4,8 @@ import android.util.Log
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.prova3.repository.GestioneAccountRepository
-import com.example.prova3.repository.GestioneAccountRepository.UpdateNameData
+import com.example.prova3.model.repository.GestioneAccountRepository
+import com.example.prova3.model.repository.GestioneAccountRepository.UpdateNameData
 
 import kotlinx.coroutines.launch
 

@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -16,25 +18,16 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun MenuImageView(
-    base64: String,
+    immagine : ImageBitmap?,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Crop
 ) {
     /* 1️⃣  Decodifica una sola volta quando cambia la stringa */
-    val imageBitmap by produceState<ImageBitmap?>(initialValue = null, base64) {
-        value = withContext(Dispatchers.IO) {
-            runCatching {
-                val bytes   = Base64.decode(base64, Base64.DEFAULT)
-                val bitmap  = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                bitmap?.asImageBitmap()
-            }.getOrNull()
-        }
-    }
 
     /* 2️⃣  Disegna l’immagine o un placeholder */
-    if (imageBitmap != null) {
+    if (immagine != null) {
         Image(
-            bitmap         = imageBitmap!!,
+            bitmap         = immagine,
             contentDescription = null,
             modifier       = modifier,
             contentScale   = contentScale

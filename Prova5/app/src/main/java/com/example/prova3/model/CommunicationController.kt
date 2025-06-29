@@ -208,6 +208,8 @@ object CommunicationController {
             Log.d(TAG, "Error ${httpResponse.status}")
             return null
         }
+        Log.d(TAG,"${httpResponse}")
+
         val risultato : OrderStatus? = httpResponse.body()
         return risultato
     }

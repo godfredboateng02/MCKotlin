@@ -1,12 +1,12 @@
 // GestioneOrdiniRepository.kt
-package com.example.prova3.repository
+package com.example.prova3.model.repository
 
-import androidx.collection.floatObjectMapOf
 import com.example.prova3.model.CommunicationController
 import com.example.prova3.model.LastOrderMenu
 import com.example.prova3.model.Location
 import com.example.prova3.model.Storage
 import com.example.prova3.model.TimeData
+import com.example.prova3.repository.Formattazione
 
 class GestioneOrdiniRepository {
 
@@ -55,7 +55,7 @@ class GestioneOrdiniRepository {
             nome = menu.name,
             prezzo = String.format("%.2f", menu.price),
             descrizione = menu.shortDescription,
-            immagine = Storage.getImage(mid, menu.imageVersion)
+            immagine = Formattazione.formatImage(Storage.getImage(mid, menu.imageVersion))
         )
     }
 
@@ -74,9 +74,8 @@ class GestioneOrdiniRepository {
                 return null
             }
 
-            val formattazione = FormattazioneRepository()
-            val tempoRimanente = formattazione.tempoRimanente(raw.expectedDeliveryTimestamp)
-            val orarioConsegna = formattazione.extractTime(raw.deliveryTimestamp)
+            val tempoRimanente = Formattazione.tempoRimanente(raw.expectedDeliveryTimestamp)
+            val orarioConsegna = Formattazione.extractTime(raw.deliveryTimestamp)
 
 
 

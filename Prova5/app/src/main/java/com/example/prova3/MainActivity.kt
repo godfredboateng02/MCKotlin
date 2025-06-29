@@ -17,9 +17,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.prova3.model.LocationManager
 import com.example.prova3.model.Storage
-import com.example.prova3.repository.GestioneAccountRepository
-import com.example.prova3.repository.GestioneMenuRepository
-import com.example.prova3.repository.GestioneOrdiniRepository
+import com.example.prova3.model.repository.GestioneAccountRepository
+import com.example.prova3.model.repository.GestioneMenuRepository
+import com.example.prova3.model.repository.GestioneOrdiniRepository
 import com.example.prova3.screens.EditProfileCard
 import com.example.prova3.screens.Homepage
 import com.example.prova3.screens.Profile

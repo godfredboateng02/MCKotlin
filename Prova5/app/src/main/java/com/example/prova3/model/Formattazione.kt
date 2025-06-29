@@ -1,15 +1,19 @@
 package com.example.prova3.repository
 
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import com.example.prova3.model.TimeData
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import android.util.Base64
 
-class FormattazioneRepository {
+object Formattazione {
 
     // Equivalente di extractTime() dal JavaScript
     fun extractTime(stringa: String?): TimeData? {
-        if (stringa == null){
+        if (stringa == null) {
             return null
         }
         val dateTime = LocalDateTime.parse(stringa.replace(" ", "T"))
@@ -23,14 +27,28 @@ class FormattazioneRepository {
         )
     }
 
-    // Equivalente di showImage() dal JavaScript
-    fun showImage(image: String): String {
-        return "data:image/png;base64," + image.drop(8).dropLast(1)
+    // Equivalente di showImage() dal JavaScript - convertito per Compose
+    fun formatImage(base64String: String): ImageBitmap? {
+        return try {
+            // Rimuove il prefixo se presente (es: "data:image/png;base64,")
+            val cleanBase64 = if (base64String.startsWith("data:")) {
+                base64String.substringAfter("base64,")
+            } else {
+                base64String
+            }
+
+            val bytes = Base64.decode(cleanBase64, Base64.DEFAULT)
+            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            bitmap?.asImageBitmap()
+        } catch (e: Exception) {
+            println("Errore decodifica immagine: ${e.message}")
+            null
+        }
     }
 
     // Equivalente di tempoRimanente() dal JavaScript
     fun tempoRimanente(expectedTime: String?): Int? {
-        if (expectedTime == null){
+        if (expectedTime == null) {
             return null
         }
         val expectedDateTime = LocalDateTime.parse(expectedTime.replace(" ", "T"))

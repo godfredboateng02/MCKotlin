@@ -5,9 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.prova3.model.MenuDetailData
 import com.example.prova3.model.OrderStatus
-import com.example.prova3.repository.GestioneAccountRepository
-import com.example.prova3.repository.GestioneMenuRepository
-import com.example.prova3.repository.GestioneOrdiniRepository
+import com.example.prova3.model.Storage
+import com.example.prova3.model.repository.GestioneAccountRepository
+import com.example.prova3.model.repository.GestioneMenuRepository
+import com.example.prova3.model.repository.GestioneOrdiniRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,13 +25,13 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
     var hasCard : StateFlow<Boolean> = _hasCard
 
     private val _hasOrder = MutableStateFlow<Boolean>(false)
-    var hasOrder : StateFlow<Boolean> = _hasCard
+    var hasOrder : StateFlow<Boolean> = _hasOrder
 
     private val _orderStatus = MutableStateFlow<OrderStatus?>(null)
     var orderStatus : StateFlow<OrderStatus?> = _orderStatus
 
 
-    private fun hasCard(){
+    fun hasCard(){
         viewModelScope.launch {
             try {
                 val result  = gestioneAccountRepository.getUserData()
@@ -45,9 +46,11 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
         }
     }
 
-    private fun hasOrder(){
+    fun hasOrder(){
         viewModelScope.launch {
             _hasOrder.value = gestioneOrdiniRepository.consegnaInCorso()
+            Log.d("menudetail","${_hasOrder.value}")
+            Log.d("menudetail","${Storage.inConsegna()}")
 
         }
     }

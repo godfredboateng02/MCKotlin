@@ -1,5 +1,6 @@
 package com.example.prova3.model
 
+import androidx.compose.ui.graphics.ImageBitmap
 import kotlinx.serialization.Serializable
 import kotlin.io.encoding.Base64
 
@@ -101,7 +102,7 @@ data class OrderStatus(
     val status: String,
     val deliveryLocation: Location,
 
-    val deliveryTimestamp: String?,
+    val deliveryTimestamp: String? = null,
     val expectedDeliveryTimestamp: String?,
     val currentPosition: Location
 
@@ -111,14 +112,14 @@ data class LastOrderMenu(
     val nome: String,
     val prezzo: String,
     val descrizione: String,
-    val immagine: String
+    val immagine: ImageBitmap?
 )
 data class MenuDetailData(
     val nome: String,
     val prezzo: String,
     val descrizione: String,
     val tempo: Int,
-    val immagine: String
+    val immagine: ImageBitmap?
 )
 
 data class MenuListItem(
@@ -127,7 +128,7 @@ data class MenuListItem(
     val descrizione: String,
     val prezzo: String,
     val tempo: Int,
-    val immagine: String
+    val immagine: ImageBitmap?
 )
 
 data class TimeData(

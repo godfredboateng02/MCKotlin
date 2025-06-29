@@ -35,8 +35,8 @@ import androidx.navigation.NavController
 import com.example.prova3.R
 import com.example.prova3.components.CardElement
 import com.example.prova3.components.LastOrderView
-import com.example.prova3.repository.GestioneAccountRepository
-import com.example.prova3.repository.GestioneOrdiniRepository
+import com.example.prova3.model.repository.GestioneAccountRepository
+import com.example.prova3.model.repository.GestioneOrdiniRepository
 import com.example.prova3.viewmodel.ProfileViewModel
 
 @Composable

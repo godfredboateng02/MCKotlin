@@ -1,7 +1,7 @@
 package com.example.prova3.screens
 
+import MenuImageView
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,8 +19,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,10 +28,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
-import com.example.prova3.R
-import com.example.prova3.repository.GestioneAccountRepository
-import com.example.prova3.repository.GestioneMenuRepository
-import com.example.prova3.repository.GestioneOrdiniRepository
+import com.example.prova3.model.repository.GestioneAccountRepository
+import com.example.prova3.model.repository.GestioneMenuRepository
+import com.example.prova3.model.repository.GestioneOrdiniRepository
 import com.example.prova3.viewmodel.MenuDetailViewModel
 
 @Composable
@@ -46,9 +43,55 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
     }
     val viewModel: MenuDetailViewModel = viewModel(factory = factory)
     val menuDettaglio = viewModel.menuDetail.collectAsState()
+    val hasCard = viewModel.hasCard.collectAsState()
+    val hasOrder = viewModel.hasOrder.collectAsState()
+
+    @Composable
+    fun BottoneOrdine(){
+        if (hasCard.value && !hasOrder.value){
+            Button(
+                onClick = {
+                    viewModel.buyMenu(mid)
+                    Log.d("MenuDetails","Acquista")},
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00)),
+                modifier = bottone
+
+            ) {
+                Text("Effettua ordine ${menuDettaglio.value?.prezzo ?: ""}")
+            }
+        }else if (!hasCard.value){
+            Button(
+                onClick = {
+                    navController.navigate("EditProfileCard")
+                    Log.d("MenuDetails","Acquista button pressed")
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00)),
+                modifier = bottone
+
+            ) {
+                Text("aggiungi carta")
+            }
+        }else if (hasOrder.value){
+            Log.d("Pulsante ordine", "${hasOrder.value}")
+            Button(
+                onClick = {
+                    navController.navigate("Homepage") // da sostituire con pagina consegna
+                    Log.d("MenuDetails","Acquista button pressed")},
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00)),
+                modifier = bottone
+
+            ) {
+                Text("hai già una consegna in corso")
+            }
+        }else{
+            Text(text = "problema pulsante")
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.getMenuDetail(mid)
+        viewModel.hasCard()
+        viewModel.hasOrder()
     }
 
     Column (
@@ -58,11 +101,8 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         //immagine
-        Image(
-            painter = painterResource(id = R.drawable.cibo),
-            contentDescription = "Immagine di un menu",
-            contentScale = ContentScale.Crop,
-            modifier = image,
+        MenuImageView(
+            immagine = menuDettaglio.value?.immagine
         )
 
         Log.d("MenuDetail",menuDettaglio.value.toString())
@@ -93,14 +133,7 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
                 Spacer(modifier = Modifier.weight(1f))
                 Text("Tempo di consegna stimato: 10 min", style = timeDistanceStyle)
 
-                Button(
-                    onClick = {Log.d("MenuDetails","Acquista button pressed")},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00)),
-                    modifier = bottone
-
-                ) {
-                    Text("Effettua ordine 10,99€")
-                }
+                BottoneOrdine()
             }
         }
     }
