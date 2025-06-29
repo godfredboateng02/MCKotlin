@@ -2,23 +2,33 @@ package com.example.prova3.screens
 
 import MenuImageView
 import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -28,6 +38,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
+import com.example.prova3.R
+import com.example.prova3.components.CardElement
+import com.example.prova3.components.LastOrderView
 import com.example.prova3.model.repository.GestioneAccountRepository
 import com.example.prova3.model.repository.GestioneMenuRepository
 import com.example.prova3.model.repository.GestioneOrdiniRepository
@@ -45,6 +58,7 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
     val menuDettaglio = viewModel.menuDetail.collectAsState()
     val hasCard = viewModel.hasCard.collectAsState()
     val hasOrder = viewModel.hasOrder.collectAsState()
+    val isLoading = viewModel.isLoading.collectAsState()
 
     @Composable
     fun BottoneOrdine(){
@@ -94,49 +108,63 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
         viewModel.hasOrder()
     }
 
-    Column (
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        //immagine
-        MenuImageView(
-            immagine = menuDettaglio.value?.immagine
-        )
+    if (!isLoading.value){
 
-        Log.d("MenuDetail",menuDettaglio.value.toString())
-
-        Box(
+        Column (
             modifier = Modifier
                 .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Column (
-                modifier = Modifier.fillMaxSize()
-                    .padding(bottom = 20.dp, start = 20.dp, end = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+            //immagine
+            MenuImageView(
+                immagine = menuDettaglio.value?.immagine
+            )
+
+            Log.d("MenuDetail",menuDettaglio.value.toString())
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
             ){
-                Text(menuDettaglio.value?.nome.toString(), style = titoloStyle, modifier = titoloModifier)
+                Column (
+                    modifier = Modifier.fillMaxSize()
+                        .padding(bottom = 20.dp, start = 20.dp, end = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ){
+                    Text(menuDettaglio.value?.nome.toString(), style = titoloStyle, modifier = titoloModifier)
 
 
-                //Descrizione breve
-                Text("Descrizione Completa", style = descrizioneStyle)
+                    //Descrizione breve
+                    Text("Descrizione Completa", style = descrizioneStyle)
 
-                //Descrizionelunga
-                Text(menuDettaglio.value?.descrizione.toString(), style = descrizioneLungaStyle)
+                    //Descrizionelunga
+                    Text(menuDettaglio.value?.descrizione.toString(), style = descrizioneLungaStyle)
 
-                //Prezzo
-                Text("10,99€", style = priceStyle, modifier = priceModifier)
+                    //Prezzo
+                    Text("10,99€", style = priceStyle, modifier = priceModifier)
 
 
-                Spacer(modifier = Modifier.weight(1f))
-                Text("Tempo di consegna stimato: 10 min", style = timeDistanceStyle)
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text("Tempo di consegna stimato: 10 min", style = timeDistanceStyle)
 
-                BottoneOrdine()
+                    BottoneOrdine()
+                }
             }
         }
+
+    }else{
+        Column(
+            Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+        }
     }
+
+
 }
 
 //Modifier
