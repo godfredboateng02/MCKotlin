@@ -54,7 +54,7 @@ fun MenuElement(menu: MenuListItem, navController: NavController,){
 
             Row (modifier = priceMinutesRow, horizontalArrangement = Arrangement.SpaceBetween,){
                 //Prezzo
-                Text(menu.prezzo.toString()+"€",style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium, color = Color(0xFF22BD3F)))
+                Text(menu.prezzo.toString()+"€",style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Medium, color = Color(0xFF22BD3F)))
                 //Minuti
                 Text(menu.tempo.toString()+" min ⏱️", modifier = Modifier.padding(top = 5.dp),style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = Color(0xFFFF7300)))
             }
