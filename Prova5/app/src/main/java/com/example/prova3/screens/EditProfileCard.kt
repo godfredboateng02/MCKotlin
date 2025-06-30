@@ -214,6 +214,7 @@ import com.example.prova3.viewmodel.EditCardViewModel
 import java.util.*
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import com.example.prova3.components.Allerta
 
 @Composable
 fun EditProfileCard(
@@ -243,6 +244,19 @@ fun EditProfileCard(
     val viewModel: EditCardViewModel = viewModel(factory = factory)
     val done = viewModel.done.collectAsState()
     if (done.value) navController.navigate("Profile")
+
+    val showError = viewModel.showError.collectAsState()
+    val errorMessage = viewModel.errorMessage.collectAsState()
+
+    if (showError.value) {
+        Allerta(
+            messaggio = errorMessage.value,
+            onChiudi = {
+                viewModel.clearError()
+                navController.navigate("Profile")
+            }
+        )
+    }
 
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 

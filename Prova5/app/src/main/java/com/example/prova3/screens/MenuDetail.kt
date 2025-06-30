@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
+import com.example.prova3.components.Allerta
 import com.example.prova3.model.repository.GestioneAccountRepository
 import com.example.prova3.model.repository.GestioneMenuRepository
 import com.example.prova3.model.repository.GestioneOrdiniRepository
@@ -56,6 +57,19 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
     val done = viewModel.done.collectAsState()
     if (done.value){
         navController.navigate("Delivery")
+    }
+
+    val showError = viewModel.showError.collectAsState()
+    val errorMessage = viewModel.errorMessage.collectAsState()
+
+    if (showError.value) {
+        Allerta(
+            messaggio = errorMessage.value,
+            onChiudi = {
+                viewModel.clearError()
+                navController.navigate("MenuDetail/${mid}")
+            }
+        )
     }
 
 

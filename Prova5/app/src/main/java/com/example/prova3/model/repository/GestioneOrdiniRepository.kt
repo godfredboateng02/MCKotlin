@@ -8,7 +8,6 @@ import com.example.prova3.model.Location
 import com.example.prova3.model.Storage
 import com.example.prova3.model.TimeData
 import com.example.prova3.repository.Formattazione
-import kotlin.jvm.Throws
 
 class GestioneOrdiniRepository {
 
@@ -34,6 +33,7 @@ class GestioneOrdiniRepository {
             val ordine = CommunicationController.postOrder(mid)
             if (ordine == null) {
                 Storage.setConsegna(false)
+                throw Exception("Errore nel ordine")
             }
 
             Storage.setRistorante(mid)
@@ -77,16 +77,7 @@ class GestioneOrdiniRepository {
                 return null
             }
 
-           /* Log.d("TEMPO","${raw.expectedDeliveryTimestamp}")
-            val tempoRimanente = Formattazione.tempoRimanente(raw.expectedDeliveryTimestamp)
-            Log.d("TEMPO","${tempoRimanente}")
 
-            Log.d("TEMPO","${raw.deliveryTimestamp}")
-            val orarioConsegna = Formattazione.extractTime(raw.deliveryTimestamp)
-            Log.d("TEMPO","${orarioConsegna}")
-
-
-            Log.d("GestioneOrdini",tempoRimanente.toString())*/
             val tempoRimanente = Formattazione.tempoRimanente(raw.expectedDeliveryTimestamp)
             val orarioConsegna =  Formattazione.extractTime(raw.deliveryTimestamp)
 

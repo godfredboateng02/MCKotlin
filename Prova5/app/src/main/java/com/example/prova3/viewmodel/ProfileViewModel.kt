@@ -26,6 +26,12 @@ class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository,
     private val _lastOrderTime = MutableStateFlow<TimeData?>(null)
     val lastOrderTime : StateFlow<TimeData?> = _lastOrderTime
 
+    private val _showError = MutableStateFlow<Boolean>(false)
+    val showError : StateFlow<Boolean> = _showError
+
+    private val _errorMessage = MutableStateFlow<String>("")
+    val errorMessage : StateFlow<String> = _errorMessage
+
     fun getUserData(){
         viewModelScope.launch {
             try {
@@ -36,6 +42,8 @@ class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository,
 
             }catch (e: Exception){
                 Log.d("ProfileViewModel","${e.message}")
+                _errorMessage.value = "Impossibile ottenere i dati dell'utente"
+                _showError.value = true
                 _isLoadingUser.value = false
 
             }
@@ -50,6 +58,8 @@ class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository,
                 _isLoadingMenu.value = false
 
             }catch (e: Exception){
+                _errorMessage.value = "Impossibile recuperare i dati del ultimo ordine"
+                _showError.value = true
                 Log.d("ProfileViewModel","${e.message}")
                 _isLoadingMenu.value = false
 
@@ -65,6 +75,11 @@ class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository,
                 Log.d("ProfileViewModel","${e.message}")
             }
         }
+    }
+
+    fun clearError() {
+        _showError.value = false
+        _errorMessage.value = ""
     }
 
 

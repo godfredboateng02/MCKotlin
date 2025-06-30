@@ -1,4 +1,4 @@
-package com.example.prova3.model  // CAMBIATO DA com.example.prova3
+package com.example.prova3.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

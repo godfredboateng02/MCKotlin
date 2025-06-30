@@ -14,6 +14,12 @@ class EditProfileViewModel(val gestioneAccountRepository: GestioneAccountReposit
     private val _done = MutableStateFlow<Boolean>(false)
     val done : StateFlow<Boolean> = _done
 
+    private val _showError = MutableStateFlow<Boolean>(false)
+    val showError : StateFlow<Boolean> = _showError
+
+    private val _errorMessage = MutableStateFlow<String>("")
+    val errorMessage : StateFlow<String> = _errorMessage
+
 
     fun updateUserData(nome : String, cognome : String){
         viewModelScope.launch {
@@ -27,9 +33,15 @@ class EditProfileViewModel(val gestioneAccountRepository: GestioneAccountReposit
                 Log.d("ProfileViewModel","Modifica dei dati...${user}")
             }catch (e: Exception){
                 Log.d("ProfileViewModel","Error: ${e.message}")
+                _errorMessage.value = "Impossibile aggiornare i dati del profilo"
+                _showError.value = true
 
             }
         }
+    }
+    fun clearError() {
+        _showError.value = false
+        _errorMessage.value = ""
     }
 
 }

@@ -253,14 +253,3 @@ object Storage {
     }
 }
 
-/*
-UTILIZZO IDENTICO AL JAVASCRIPT:
-
-// Inizializzazione (una volta sola):
-Storage.initialize(context)
-
-// Uso (ovunque nell'app):
-val sid = Storage.getSid()        // Esattamente come JS!
-val pagina = Storage.getPagina()  // Esattamente come JS!
-Storage.setPagina("MenuScreen")   // Esattamente come JS!
-*/

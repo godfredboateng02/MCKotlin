@@ -20,6 +20,12 @@ class HomepageViewModel(val gestioneMenuRepository: GestioneMenuRepository) : Vi
     private val _consegnaInCorso = MutableStateFlow<Boolean>(false)
     val consegnaInCorso : StateFlow<Boolean> = _consegnaInCorso
 
+    private val _showError = MutableStateFlow<Boolean>(false)
+    val showError : StateFlow<Boolean> = _showError
+
+    private val _errorMessage = MutableStateFlow<String>("")
+    val errorMessage : StateFlow<String> = _errorMessage
+
     fun checkConsegnaInCorso(){
         viewModelScope.launch {
             _consegnaInCorso.value = Storage.inConsegna()
@@ -34,9 +40,15 @@ class HomepageViewModel(val gestioneMenuRepository: GestioneMenuRepository) : Vi
                 _isLoading.value = false
             }catch (e: Exception){
                 Log.d("HomepageViewModel","Error: ${e.message}")
+                _errorMessage.value = "Impossibile ottenere la lista dei menu"
+                _showError.value = true
                 _isLoading.value = false
 
             }
         }
+    }
+    fun clearError() {
+        _showError.value = false
+        _errorMessage.value = ""
     }
 }

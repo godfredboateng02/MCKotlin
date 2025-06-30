@@ -31,6 +31,13 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
     private val _done = MutableStateFlow<Boolean>(false)
     val done : StateFlow<Boolean> = _done
 
+    private val _showError = MutableStateFlow<Boolean>(false)
+    val showError : StateFlow<Boolean> = _showError
+
+    private val _errorMessage = MutableStateFlow<String>("")
+    val errorMessage : StateFlow<String> = _errorMessage
+
+
 
 
     fun hasCard(){
@@ -43,6 +50,8 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
                     _hasCard.value = false
                 }
             }catch (e: Exception){
+                _errorMessage.value = "Impossibile recuperare i dati della carta"
+                _showError.value = true
                 Log.d("MenuDetailViewModel","Error: ${e.message}")
             }
         }
@@ -66,6 +75,8 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
                 _isLoading.value = false
             }catch (e: Exception){
                 Log.d("MenuDetailsViewModel","Error: ${e.message}")
+                _errorMessage.value = "Impossibile caricare i dettagli del menu"
+                _showError.value = true
                 _isLoading.value = false
             }
         }
@@ -84,10 +95,16 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
                     delay(500)
                     _done.value = false
                 }catch(e : Exception){
+                    _errorMessage.value = "Impossibile acquistare il menu"
+                    _showError.value = true
                     Log.d("MenuDetailsViewModel","Error: ${e.message}")
                 }
             }
 
         }
+    }
+    fun clearError() {
+        _showError.value = false
+        _errorMessage.value = ""
     }
 }

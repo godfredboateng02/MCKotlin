@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import com.example.prova3.R
+import com.example.prova3.components.Allerta
 import com.example.prova3.components.LastOrderView
 import com.example.prova3.model.repository.GestioneOrdiniRepository
 import com.example.prova3.viewmodel.DeliveryViewModel
@@ -64,6 +65,19 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
     val isLoading = viewModel.isLoading.collectAsState()
     val orderStatus = viewModel.orderStatus.collectAsState()
     val ristorante = viewModel.ristorante.collectAsState()
+
+    val showError = viewModel.showError.collectAsState()
+    val errorMessage = viewModel.errorMessage.collectAsState()
+
+    if (showError.value) {
+        Allerta(
+            messaggio = errorMessage.value,
+            onChiudi = {
+                viewModel.clearError()
+                navController.navigate("Homepage")
+            }
+        )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.lastOrderMenu()

@@ -19,6 +19,7 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import kotlin.random.Random
 
 object CommunicationController {
     private val BASE_URL = "https://develop.ewlab.di.unimi.it/mc/2425"
@@ -40,9 +41,21 @@ object CommunicationController {
         PUT
     }
 
+    /*//Testing
+    fun rouletteRussa() {
+        val randomNumber = Random.nextInt(1, 11) // numeri da 1 a 10
+
+        if (randomNumber % 3 == 0) { // se divisibile per 3
+            throw Exception("Errore di rete simulato")
+        }
+    }*/
+
+
+
     suspend fun genericRequest(url: String, method: HttpMethod,
                                queryParameters: Map<String, Any> = emptyMap(),
                                requestBody: Any? = null) : HttpResponse {
+        //rouletteRussa()
 
         val urlUri = Uri.parse(url)
         val urlBuilder = urlUri.buildUpon()

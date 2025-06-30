@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
+import com.example.prova3.components.Allerta
 import com.example.prova3.model.repository.GestioneAccountRepository
 import com.example.prova3.viewmodel.EditProfileViewModel
 
@@ -50,6 +51,19 @@ fun EditProfileData(
     val viewModel: EditProfileViewModel = viewModel(factory = factory)
     val done = viewModel.done.collectAsState()
     if (done.value) navController.navigate("Profile")
+
+    val showError = viewModel.showError.collectAsState()
+    val errorMessage = viewModel.errorMessage.collectAsState()
+
+    if (showError.value) {
+        Allerta(
+            messaggio = errorMessage.value,
+            onChiudi = {
+                viewModel.clearError()
+                navController.navigate("Profile")
+            }
+        )
+    }
 
     /* ---------- VALIDAZIONE ---------- */
     val maxLen = 15

@@ -29,6 +29,12 @@ class DeliveryViewModel(val gestioneOrdiniRepository: GestioneOrdiniRepository) 
     private val _ristorante = MutableStateFlow<Location?>(null)
     val ristorante : StateFlow<Location?> = _ristorante
 
+    private val _showError = MutableStateFlow<Boolean>(false)
+    val showError : StateFlow<Boolean> = _showError
+
+    private val _errorMessage = MutableStateFlow<String>("")
+    val errorMessage : StateFlow<String> = _errorMessage
+
     fun lastOrderMenu(){
         viewModelScope.launch {
             try {
@@ -37,6 +43,8 @@ class DeliveryViewModel(val gestioneOrdiniRepository: GestioneOrdiniRepository) 
                 _isLoading.value = false
 
             }catch (e: Exception){
+                _errorMessage.value = "Impossibile caricare dettagli menu"
+                _showError.value = true
                 Log.d("LastOrderView","${e.message}")
                 _isLoading.value = false
 
@@ -56,6 +64,8 @@ class DeliveryViewModel(val gestioneOrdiniRepository: GestioneOrdiniRepository) 
 
             }catch (e: Exception){
                 Log.d("LastOrderView","Error: ${e.message}")
+                _errorMessage.value = "Impossibile ottenere lo stato del ordine"
+                _showError.value = true
             }
         }
     }
@@ -68,5 +78,9 @@ class DeliveryViewModel(val gestioneOrdiniRepository: GestioneOrdiniRepository) 
                 Log.d("LastOrderViewModel","${e.message}")
             }
         }
+    }
+    fun clearError() {
+        _showError.value = false
+        _errorMessage.value = ""
     }
 }

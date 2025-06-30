@@ -13,6 +13,12 @@ class EditCardViewModel(val gestioneAccountRepository: GestioneAccountRepository
     private val _done = MutableStateFlow<Boolean>(false)
     val done : StateFlow<Boolean> = _done
 
+    private val _showError = MutableStateFlow<Boolean>(false)
+    val showError : StateFlow<Boolean> = _showError
+
+    private val _errorMessage = MutableStateFlow<String>("")
+    val errorMessage : StateFlow<String> = _errorMessage
+
 
     fun updateCardData(fullName : String, number : String, expireMonth : Int, expireYear : Int, cvv : String ){
         viewModelScope.launch {
@@ -22,9 +28,15 @@ class EditCardViewModel(val gestioneAccountRepository: GestioneAccountRepository
                 delay(500)
                 _done.value = false
             }catch (e: Exception){
+                _errorMessage.value = "Impossibile aggiornare i dati della carta"
+                _showError.value = true
                 Log.d("ProfileViewModel","Error: ${e.message}")
             }
         }
+    }
+    fun clearError() {
+        _showError.value = false
+        _errorMessage.value = ""
     }
 
 }

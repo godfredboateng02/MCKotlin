@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
+import com.example.prova3.components.Allerta
 import com.example.prova3.model.repository.GestioneAccountRepository
 import com.example.prova3.viewmodel.FirstScreenViewModel
 
@@ -58,6 +59,19 @@ fun FirstScreen(
     val done = viewModel.done.collectAsState()
     if (done.value){
         navController.navigate("LoadingScreen")
+    }
+
+    val showError = viewModel.showError.collectAsState()
+    val errorMessage = viewModel.errorMessage.collectAsState()
+
+    if (showError.value) {
+        Allerta(
+            messaggio = errorMessage.value,
+            onChiudi = {
+                viewModel.clearError()
+                navController.navigate("FirstScreen")
+            }
+        )
     }
 
     val formValid = cognome.isNotBlank() && nome.isNotBlank()
