@@ -159,8 +159,8 @@ object CommunicationController {
     // PRENDE automaticamente sid e location da Storage/LocationManager
     suspend fun postOrder(mid: Int): MenuBuyed? {
         val sid = Storage.getSid()  // Prende da Storage!
-        val lat = LocationManager.getLat() ?: 0.0f
-        val lng = LocationManager.getLng() ?: 0.0f
+        val lat : Double = LocationManager.getLat() ?: 0.0
+        val lng = LocationManager.getLng() ?: 0.0
 
         val url  = "$BASE_URL/menu/$mid/buy"
         val body = MenuBuyQuery(sid, Location(lat, lng))

@@ -59,8 +59,8 @@ data class Menu(
 
 @Serializable
 data class Location(
-    val lat: Float,
-    val lng: Float
+    val lat: Double,
+    val lng: Double
 )
 
 @Serializable
@@ -103,7 +103,7 @@ data class OrderStatus(
     val deliveryLocation: Location,
 
     val deliveryTimestamp: String? = null,
-    val expectedDeliveryTimestamp: String?,
+    val expectedDeliveryTimestamp: String? = null,
     val currentPosition: Location
 
 )

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -28,8 +29,8 @@ object Storage {
         val MID = intPreferencesKey("mid")
         val PAGINA = stringPreferencesKey("pagina")
         val PARAMETRI = stringPreferencesKey("parametri")
-        val RISTORANTE_LAT = floatPreferencesKey("ristorante_lat")
-        val RISTORANTE_LNG = floatPreferencesKey("ristorante_lng")
+        val RISTORANTE_LAT = doublePreferencesKey("ristorante_lat")
+        val RISTORANTE_LNG = doublePreferencesKey("ristorante_lng")
         val CONSEGNA = booleanPreferencesKey("consegna")
     }
 
@@ -89,22 +90,7 @@ object Storage {
         }
     }
 
-    suspend fun getParametri(): String? {
-        checkInitialized()
-        if (cachedParametri == null) {
-            val prefs = appContext.dataStore.data.first()
-            cachedParametri = prefs[PreferencesKeys.PARAMETRI]
-        }
-        return cachedParametri
-    }
 
-    suspend fun setParametri(parametri: String) {
-        checkInitialized()
-        cachedParametri = parametri
-        appContext.dataStore.edit { preferences ->
-            preferences[PreferencesKeys.PARAMETRI] = parametri
-        }
-    }
 
     suspend fun getSid(): String {
         checkInitialized()
@@ -207,8 +193,8 @@ object Storage {
 
     suspend fun setRistorante(mid: Int) {
         checkInitialized()
-        val lat = LocationManager.getLat() ?: 0.0f
-        val lng = LocationManager.getLng() ?: 0.0f
+        val lat : Double = LocationManager.getLat() ?: 0.0
+        val lng : Double = LocationManager.getLng() ?: 0.0
 
         val risposta: MenuDetails = CommunicationController.getMenuDetails(mid)
         val ristorante: Location = risposta.location
@@ -217,8 +203,8 @@ object Storage {
         println("setRistorante lat,lng: ${ristorante.lat} ${ristorante.lng}")
 
         appContext.dataStore.edit { preferences ->
-            preferences[PreferencesKeys.RISTORANTE_LAT] = ristorante.lat ?: 0.0f
-            preferences[PreferencesKeys.RISTORANTE_LNG] = ristorante.lng ?: 0.0f
+            preferences[PreferencesKeys.RISTORANTE_LAT] = ristorante.lat ?: 0.0
+            preferences[PreferencesKeys.RISTORANTE_LNG] = ristorante.lng ?: 0.0
         }
     }
 

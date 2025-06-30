@@ -17,8 +17,8 @@ object LocationManager {
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
     // Cache come nel JavaScript
-    private var cachedLat: Float? = null
-    private var cachedLng: Float? = null
+    private var cachedLat: Double? = null
+    private var cachedLng: Double? = null
     private var resetJob: Job? = null
 
     // INIZIALIZZAZIONE - semplice come Storage
@@ -46,7 +46,7 @@ object LocationManager {
     }
 
     // Equivalente di getCurrentPosition() del JavaScript
-    suspend fun getCurrentPosition(): LocationData? {
+    suspend fun getCurrentPosition(): Location? {
         return try {
             if (!hasLocationPermission()) {
                 println("Permessi non concessi per accedere alla posizione.")
@@ -55,10 +55,7 @@ object LocationManager {
 
             val location = getLastKnownLocation()
             if (location != null) {
-                LocationData(
-                    latitude = location.latitude.toFloat(),
-                    longitude = location.longitude.toFloat()
-                )
+                location
             } else {
                 null
             }
@@ -109,7 +106,7 @@ object LocationManager {
     }
 
     // Equivalente di getLat(RN) del JavaScript
-    suspend fun getLat(forceRefresh: Boolean = false): Float? {
+    suspend fun getLat(forceRefresh: Boolean = false): Double? {
         checkInitialized()
         if (cachedLat == null || forceRefresh) {
             updateLocation()
@@ -119,7 +116,7 @@ object LocationManager {
     }
 
     // Equivalente di getLng(RN) del JavaScript
-    suspend fun getLng(forceRefresh: Boolean = false): Float? {
+    suspend fun getLng(forceRefresh: Boolean = false): Double? {
         checkInitialized()
         if (cachedLng == null || forceRefresh) {
             updateLocation()
@@ -135,7 +132,3 @@ object LocationManager {
 }
 
 // Data class per i dati di posizione (compatibile con DataClasses.kt)
-data class LocationData(
-    val latitude: Float,
-    val longitude: Float
-)

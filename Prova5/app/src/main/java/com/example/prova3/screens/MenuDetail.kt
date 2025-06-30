@@ -147,7 +147,7 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
 
 
                     Spacer(modifier = Modifier.weight(1f))
-                    Text("Tempo di consegna stimato: 10 min", style = timeDistanceStyle)
+                    Text("Tempo di consegna stimato: ${menuDettaglio.value?.tempo}", style = timeDistanceStyle)
 
                     BottoneOrdine()
                 }

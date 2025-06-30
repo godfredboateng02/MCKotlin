@@ -56,6 +56,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
     val ultimoOrdine = viewModel.lastOrderMenu.collectAsState()
     val isLoading = viewModel.isLoading.collectAsState()
     val orderStatus = viewModel.orderStatus.collectAsState()
+    val ristorante = viewModel.ristorante.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.lastOrderMenu()
@@ -68,11 +69,12 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
         Box(modifier = Modifier.fillMaxSize()) {
             MapboxMap(
                 modifier = Modifier
-                    .fillMaxWidth().fillMaxHeight(),
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
                 mapViewportState = rememberMapViewportState {
                     setCameraOptions {
                         zoom(13.0)
-                        center(Point.fromLngLat(9.23, 45.476))
+                        center(Point.fromLngLat(orderStatus.value?.destinazione?.lng ?:0.0, orderStatus.value?.destinazione?.lat ?:0.0))
                         pitch(0.0)
                         bearing(10.0)
                     }
@@ -82,7 +84,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                     key = R.drawable.location_marker,
                     painter = painterResource(R.drawable.location_marker),
                 )
-                PointAnnotation(point = Point.fromLngLat(9.2303, 45.4769)) {
+                PointAnnotation(point = Point.fromLngLat(ristorante.value?.lng ?: 0.0, ristorante.value?.lat ?: 0.0)) {
                     iconImage = partenzaIcon
                     iconSize = 0.3 // Scala del marker: 1.0 = originale, 2.0 = doppio
                 }
@@ -91,7 +93,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                     key = R.drawable.location_marker,
                     painter = painterResource(R.drawable.location_marker),
                 )
-                PointAnnotation(point = Point.fromLngLat(9.2333, 45.5769)) {
+                PointAnnotation(point = Point.fromLngLat(orderStatus.value?.destinazione?.lng ?:0.0, orderStatus.value?.destinazione?.lat ?:0.0)) {
                     iconImage = destinazioneIcon
                     iconSize = 0.3 // Scala del marker: 1.0 = originale, 2.0 = doppio
                 }
@@ -100,7 +102,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                     key = R.drawable.drone,
                     painter = painterResource(R.drawable.drone),
                 )
-                PointAnnotation(point = Point.fromLngLat(9.2303, 45.4769)) {
+                PointAnnotation(point = Point.fromLngLat(orderStatus.value?.drone?.lng ?:0.0 , orderStatus.value?.drone?.lat ?:0.0)) {
                     iconImage = droneIcon
                     iconSize = 2.0 // Scala del marker: 1.0 = originale, 2.0 = doppio
                 }
@@ -129,14 +131,20 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
             }
 
             Column(
-                modifier = Modifier.fillMaxWidth().height(300.dp).background(Color.White).align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+                    .background(Color.White)
+                    .align(Alignment.BottomCenter),
             ) {
 
                 Spacer(Modifier.height(20.dp))
                 LastOrderView(ultimoOrdine.value)
 
                 Column(
-                    modifier = Modifier.fillMaxSize().padding(bottom = 20.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 20.dp),
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -150,37 +158,45 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                             )
 
                             Text(
-                                text = orderStatus.value?.tempoRimanente.toString(),
+                                text = "${orderStatus.value?.tempoRimanente} minuti",
                                 modifier = Modifier.padding(bottom = 10.dp),
                                 style = TextStyle(fontSize = 20.sp, color = Color(0XFFFF7300))
 
                             )
                         }else if (orderStatus.value?.stato == "COMPLETED"){
                             Text(
-                                text = "Conferma ricezione" ,
+                                text = "Consegnato alle: " ,
                                 modifier = Modifier.padding(bottom = 10.dp),
                                 style = TextStyle(fontSize = 20.sp)
+                            )
+                            Text(
+                                text = "${orderStatus.value?.orarioConsegna?.ora}",
+                                modifier = Modifier.padding(bottom = 10.dp),
+                                style = TextStyle(fontSize = 20.sp, color = Color(0XFFFF7300))
+
                             )
                         }
 
 
                     }
 
-                    Button(
-                        onClick = {
-                            navController.navigate("Homepage")
-                            viewModel.confermaRicezione()
-                                  },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp)
-                            .padding(horizontal = 30.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xffff7300))
-                    ) {
-                        Text(
-                            "Conferma ricezione",
-                            style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium)
-                        )
+                    if (orderStatus.value?.stato == "COMPLETED"){
+                        Button(
+                            onClick = {
+                                navController.navigate("Homepage")
+                                viewModel.confermaRicezione()
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(60.dp)
+                                .padding(horizontal = 30.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xffff7300))
+                        ) {
+                            Text(
+                                "Conferma ricezione",
+                                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                            )
+                        }
                     }
                 }
             }

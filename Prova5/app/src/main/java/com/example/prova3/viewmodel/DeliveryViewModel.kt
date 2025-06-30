@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.prova3.model.LastOrderMenu
+import com.example.prova3.model.Location
+import com.example.prova3.model.Storage
 import com.example.prova3.model.repository.GestioneOrdiniRepository
 import com.example.prova3.model.repository.GestioneOrdiniRepository.OrderStatusCompact
 import kotlinx.coroutines.delay
@@ -24,6 +26,9 @@ class DeliveryViewModel(val gestioneOrdiniRepository: GestioneOrdiniRepository) 
     private val _orderStatus = MutableStateFlow<OrderStatusCompact?>(null)
     val orderStatus : StateFlow<OrderStatusCompact?> = _orderStatus
 
+    private val _ristorante = MutableStateFlow<Location?>(null)
+    val ristorante : StateFlow<Location?> = _ristorante
+
     fun lastOrderMenu(){
         viewModelScope.launch {
             try {
@@ -41,6 +46,7 @@ class DeliveryViewModel(val gestioneOrdiniRepository: GestioneOrdiniRepository) 
 
     fun getOrderStatus(){
         viewModelScope.launch {
+            _ristorante.value = Storage.getRistorante()
             try {
                 do {
                     _orderStatus.value = gestioneOrdiniRepository.orderStatus()

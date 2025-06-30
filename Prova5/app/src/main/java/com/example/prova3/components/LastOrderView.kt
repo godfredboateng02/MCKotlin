@@ -48,7 +48,7 @@ fun LastOrderView(ultimoOrdine: LastOrderMenu?){
                 modifier = Modifier.fillMaxSize()
             ){
                 Image(
-                    painter = painterResource(id = R.drawable.cibo),
+                    bitmap = ultimoOrdine.immagine!!,
                     contentDescription = ("menu immagine"),
                     modifier = Modifier
                         .padding(7.dp)
