@@ -257,7 +257,7 @@ fun EditProfileCard(
                 .background(Color(0xFFFF7300))
         ) {
             Row(Modifier.fillMaxWidth()) {
-                Text("<", Modifier.weight(1f).padding(top = 66.dp, start = 16.dp))
+                Text(" ", Modifier.weight(1f).padding(top = 66.dp, start = 16.dp))
                 Text(
                     "Profilo / Modifica dati della carta",
                     Modifier.weight(5f).padding(top = 66.dp),
