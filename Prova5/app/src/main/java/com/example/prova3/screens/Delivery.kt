@@ -107,13 +107,19 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
 
 
                 val pList = mutableListOf<Point>()
-                val p1 = Point.fromLngLat(9.2333,45.5769)
-                val p2 = Point.fromLngLat(9.2303,45.4769)
+                val pList2 = mutableListOf<Point>()
+                val partenza = Point.fromLngLat(9.2333,45.5769)
+                val destinazione = Point.fromLngLat(9.2303,45.4769)
                 val drone = Point.fromLngLat(9.2303, 45.4769)
-                pList.add(p1)
+                pList.add(partenza)
                 pList.add(drone)
-                pList.add(p2)
+                pList2.add(drone)
+                pList2.add(destinazione)
                 PolylineAnnotation(pList){
+                    lineColor = Color(0xFF8200FD)
+                    lineWidth = 6.0
+                }
+                PolylineAnnotation(pList2){
                     lineColor = Color(0xFF8200FD)
                     lineWidth = 6.0
                 }
