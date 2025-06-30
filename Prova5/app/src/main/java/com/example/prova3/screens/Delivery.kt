@@ -158,7 +158,13 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                             )
 
                             Text(
-                                text = "${orderStatus.value?.tempoRimanente} minuti",
+                                text = if (orderStatus.value?.tempoRimanente == 0){
+                                    "meno di un minuto"
+                                }else if (orderStatus.value?.tempoRimanente == 1){
+                                    "${orderStatus.value?.tempoRimanente} minuto"
+                                }else{
+                                    "${orderStatus.value?.tempoRimanente} minuti"
+                                },
                                 modifier = Modifier.padding(bottom = 10.dp),
                                 style = TextStyle(fontSize = 20.sp, color = Color(0XFFFF7300), fontWeight = FontWeight.SemiBold)
 
