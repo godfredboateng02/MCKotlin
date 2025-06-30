@@ -59,7 +59,10 @@ object Formattazione {
     }
 
 
-    fun tempoRimanente(utcIsoZ: String): Int {
+    fun tempoRimanente(utcIsoZ: String?): Int? {
+        if(utcIsoZ == null){
+            return null
+        }
         val target = Instant.parse(utcIsoZ)
         val now    = Instant.now()
 

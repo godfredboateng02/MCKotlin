@@ -87,6 +87,7 @@ class GestioneOrdiniRepository {
 
 
             Log.d("GestioneOrdini",tempoRimanente.toString())*/
+            val tempoRimanente = Formattazione.tempoRimanente(raw.expectedDeliveryTimestamp)
             val orarioConsegna =  Formattazione.extractTime(raw.deliveryTimestamp)
 
 
@@ -95,7 +96,7 @@ class GestioneOrdiniRepository {
                 partenza = Storage.getRistorante(),
                 destinazione = raw.deliveryLocation,
                 drone = raw.currentPosition,
-                tempoRimanente = 3,
+                tempoRimanente = tempoRimanente,
                 orarioConsegna = orarioConsegna
             )
         } catch (error: Exception) {
