@@ -47,8 +47,12 @@ fun Homepage(navController: NavController, gestioneMenuRepository: GestioneMenuR
     val viewModel: HomepageViewModel = viewModel(factory = factory)
     val listaMenu = viewModel.listaMenu.collectAsState()
     val isLoading = viewModel.isLoading.collectAsState()
+    val consegnaInCorso = viewModel.consegnaInCorso.collectAsState()
 
-    LaunchedEffect(Unit) { viewModel.getListaMenu() }
+    LaunchedEffect(Unit) {
+        viewModel.getListaMenu()
+        viewModel.checkConsegnaInCorso()
+    }
 
     if (isLoading.value == false) {
 
@@ -95,15 +99,17 @@ fun Homepage(navController: NavController, gestioneMenuRepository: GestioneMenuR
             /* ---------------- LOGO FLOTANTE ---------------- */
 
 
-            Image(
-                painter = painterResource(R.drawable.delivery_icon),
-                contentDescription = "Delivery",
-                modifier = Modifier
-                    .size(100.dp)
-                    .align(Alignment.BottomEnd)          // in basso a destra
-                    .padding(end = 24.dp, bottom = 24.dp)
-                    .clickable { navController.navigate("Delivery") }
-            )
+            if (consegnaInCorso.value){
+                Image(
+                    painter = painterResource(R.drawable.delivery_icon),
+                    contentDescription = "Delivery",
+                    modifier = Modifier
+                        .size(100.dp)
+                        .align(Alignment.BottomEnd)          // in basso a destra
+                        .padding(end = 24.dp, bottom = 24.dp)
+                        .clickable { navController.navigate("Delivery") }
+                )
+            }
         }
 
     } else {

@@ -1,6 +1,7 @@
 package com.example.prova3.screens
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,6 +49,9 @@ import com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor
 
 @Composable
 fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrdiniRepository) {
+    BackHandler {
+        navController.navigate("Homepage")
+    }
 
     val factory = viewModelFactory {
         initializer {
