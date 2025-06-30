@@ -51,6 +51,12 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
     val hasOrder = viewModel.hasOrder.collectAsState()
     val isLoading = viewModel.isLoading.collectAsState()
 
+    val done = viewModel.done.collectAsState()
+    if (done.value){
+        navController.navigate("Delivery")
+    }
+
+
     @Composable
     fun BottoneOrdine(){
         if (hasCard.value && !hasOrder.value){
@@ -58,7 +64,7 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
                 onClick = {
                     viewModel.buyMenu(mid)
                     Log.d("MenuDetails","Acquista")
-                    navController.navigate("Delivery")},
+                          },
 
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00)),
                 modifier = bottone

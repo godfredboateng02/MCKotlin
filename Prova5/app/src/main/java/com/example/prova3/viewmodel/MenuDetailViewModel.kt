@@ -28,6 +28,9 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
     private val _hasOrder = MutableStateFlow<Boolean>(false)
     var hasOrder : StateFlow<Boolean> = _hasOrder
 
+    private val _done = MutableStateFlow<Boolean>(false)
+    val done : StateFlow<Boolean> = _done
+
 
 
     fun hasCard(){
@@ -77,6 +80,9 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
             if (_hasCard.value && !_hasOrder.value){
                 try {
                     gestioneOrdiniRepository.effettuaOrdine(mid)
+                    _done.value = true
+                    delay(500)
+                    _done.value = false
                 }catch(e : Exception){
                     Log.d("MenuDetailsViewModel","Error: ${e.message}")
                 }
