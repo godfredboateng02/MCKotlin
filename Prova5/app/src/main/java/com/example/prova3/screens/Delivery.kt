@@ -142,7 +142,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                 ) {
                     Row {
 
-                        if(orderStatus.value?.tempoRimanente == null){
+                        if(orderStatus.value?.stato == "ON_DELIVERY"){
                             Text(
                                 text = "In consegna tra:" ,
                                 modifier = Modifier.padding(bottom = 10.dp),
@@ -155,9 +155,9 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                                 style = TextStyle(fontSize = 20.sp, color = Color(0XFFFF7300))
 
                             )
-                        }else{
+                        }else if (orderStatus.value?.stato == "COMPLETED"){
                             Text(
-                                text = "Consegnato" ,
+                                text = "Conferma ricezione" ,
                                 modifier = Modifier.padding(bottom = 10.dp),
                                 style = TextStyle(fontSize = 20.sp)
                             )
