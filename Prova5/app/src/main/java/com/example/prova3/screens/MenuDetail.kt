@@ -143,11 +143,11 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
                     Text(menuDettaglio.value?.descrizione.toString(), style = descrizioneLungaStyle)
 
                     //Prezzo
-                    Text("10,99€", style = priceStyle, modifier = priceModifier)
+                    Text(menuDettaglio.value?.prezzo.toString()+"€", style = priceStyle, modifier = priceModifier)
 
 
                     Spacer(modifier = Modifier.weight(1f))
-                    Text("Tempo di consegna stimato: ${menuDettaglio.value?.tempo}", style = timeDistanceStyle)
+                    Text("Tempo di consegna stimato: ${menuDettaglio.value?.tempo} min", style = timeDistanceStyle)
 
                     BottoneOrdine()
                 }

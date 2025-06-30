@@ -38,62 +38,81 @@ import com.example.prova3.model.repository.GestioneMenuRepository
 import com.example.prova3.viewmodel.HomepageViewModel
 
 @Composable
-fun Homepage(navController: NavController,gestioneMenuRepository: GestioneMenuRepository){
-    BackHandler {
-
-    }
+fun Homepage(navController: NavController, gestioneMenuRepository: GestioneMenuRepository) {
+    BackHandler { /* gestione back se necessaria */ }
 
     val factory = viewModelFactory {
-        initializer {
-            HomepageViewModel(gestioneMenuRepository)
-        }
+        initializer { HomepageViewModel(gestioneMenuRepository) }
     }
     val viewModel: HomepageViewModel = viewModel(factory = factory)
     val listaMenu = viewModel.listaMenu.collectAsState()
-
     val isLoading = viewModel.isLoading.collectAsState()
 
+    LaunchedEffect(Unit) { viewModel.getListaMenu() }
 
-    // CARICA LA LISTA DEI MENU CON LE LORO IMMAGINI
-    LaunchedEffect(Unit) {
-        //spinning wheel
-        viewModel.getListaMenu()
-    }
+    if (isLoading.value == false) {
 
-    if (isLoading.value == false){
+        /* ------------ CONTENITORE PRINCIPALE + OVERLAY ------------ */
+        Box(Modifier.fillMaxSize()) {
+
+            /* ----------------- CONTENUTO ESISTENTE ----------------- */
+            Column(Modifier.fillMaxSize()) {
+
+                // Header
+                Box(Modifier.fillMaxWidth().height(120.dp)) {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            "I nostri menu",
+                            Modifier.padding(top = 50.dp, start = 16.dp),
+                            style = TextStyle(
+                                fontSize = 40.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFFFF7300)
+                            )
+                        )
+                        Image(
+                            painter = painterResource(R.drawable.logo),
+                            contentDescription = "Logo",
+                            modifier = Modifier
+                                .padding(top = 45.dp, end = 20.dp)
+                                .size(70.dp)
+                                .clip(CircleShape)
+                                .clickable { navController.navigate("Profile") },
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+
+                // Lista menu
+                Box {
+                    listaMenu.value?.let { MenuListView(it, navController) }
+                }
+            }
+
+            /* ---------------- LOGO FLOTANTE ---------------- */
+
+
+            Image(
+                painter = painterResource(R.drawable.delivery_icon),
+                contentDescription = "Delivery",
+                modifier = Modifier
+                    .size(100.dp)
+                    .align(Alignment.BottomEnd)          // in basso a destra
+                    .padding(end = 24.dp, bottom = 24.dp)
+                    .clickable { navController.navigate("Delivery") }
+            )
+        }
+
+    } else {
         Column(
             Modifier.fillMaxSize(),
-        ){
-            Box(
-                Modifier.fillMaxWidth().height(120.dp),
-            ){
-                Row (
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ){
-                    Text("I nostri menu", Modifier.padding(top = 50.dp, start = 16.dp),style=TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF7300)))
-                    Image(
-                        painter = painterResource(R.drawable.logo),
-                        contentDescription = "Logo",
-                        modifier = Modifier.padding(top=45.dp, end = 20.dp).size(70.dp).clip(CircleShape).padding().clickable{
-                            navController.navigate("Profile")
-                        },
-                        contentScale = ContentScale.Crop,
-                    )
-                }
-            }
-            Box(){
-                listaMenu.value?.let {
-                    MenuListView(it, navController)
-                }
-            }
-            //MenuListView()
-        }
-    }else{
-        Column (Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             CircularProgressIndicator()
         }
     }
-
-
 }
