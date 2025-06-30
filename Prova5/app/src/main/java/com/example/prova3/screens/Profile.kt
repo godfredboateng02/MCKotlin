@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.substring
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,10 +59,13 @@ fun Profile(navController: NavController, gestioneAccountRepository: GestioneAcc
     val isLoadingUser = viewModel.isLoadingUser.collectAsState()
     val isLoadingMenu = viewModel.isLoadingMenu.collectAsState()
 
+    val lastOrderTime = viewModel.lastOrderTime.collectAsState()
+
 
     LaunchedEffect(Unit) {
         viewModel.getUserData()
         viewModel.lastOrderMenu()
+        viewModel.lastOrderTime()
     }
 
     if ( !isLoadingMenu.value && !isLoadingUser.value){
@@ -119,8 +123,11 @@ fun Profile(navController: NavController, gestioneAccountRepository: GestioneAcc
 
 
             //Ordini recenti
-            Text("Ordini recenti", modifier = Modifier.padding(start = 16.dp, top = 30.dp, bottom = 15.dp), style = titoliStyle)
+            Text("Ultimo ordine", modifier = Modifier.padding(start = 16.dp, top = 30.dp, bottom = 5.dp), style = titoliStyle)
 
+            if (lastOrderTime.value != null){
+                Text(text = "${lastOrderTime.value?.data}, ${lastOrderTime.value?.ora?.substring(0..4)}" , modifier = Modifier.padding(start = 16.dp, bottom = 10.dp))
+            }
 
             if (ultimoOrdine.value != null){
                 Row(

@@ -104,8 +104,6 @@ class GestioneAccountRepository {
 
             val timeData = Formattazione.extractTime(risposta.creationTimestamp)
 
-            // Conversione formato giorno (come nel JS con dayjs)
-            // Per semplicità uso il formato base, puoi aggiungere libreria per date se serve
             timeData
         } catch (error: Exception) {
             throw error

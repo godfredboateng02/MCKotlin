@@ -87,6 +87,8 @@ class GestioneOrdiniRepository {
 
 
             Log.d("GestioneOrdini",tempoRimanente.toString())*/
+            val orarioConsegna =  Formattazione.extractTime(raw.deliveryTimestamp)
+
 
             return OrderStatusCompact(
                 stato = raw.status,
@@ -94,7 +96,7 @@ class GestioneOrdiniRepository {
                 destinazione = raw.deliveryLocation,
                 drone = raw.currentPosition,
                 tempoRimanente = 3,
-                orarioConsegna = TimeData("ciao","ciao")
+                orarioConsegna = orarioConsegna
             )
         } catch (error: Exception) {
             throw error
