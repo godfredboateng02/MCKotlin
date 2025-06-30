@@ -74,7 +74,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                 mapViewportState = rememberMapViewportState {
                     setCameraOptions {
                         zoom(13.0)
-                        center(Point.fromLngLat(orderStatus.value?.destinazione?.lng ?:0.0, orderStatus.value?.destinazione?.lat ?:0.0))
+                        center(Point.fromLngLat(orderStatus.value?.drone?.lng ?:0.0 , orderStatus.value?.drone?.lat ?:0.0))
                         pitch(0.0)
                         bearing(10.0)
                     }
@@ -104,15 +104,15 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                 )
                 PointAnnotation(point = Point.fromLngLat(orderStatus.value?.drone?.lng ?:0.0 , orderStatus.value?.drone?.lat ?:0.0)) {
                     iconImage = droneIcon
-                    iconSize = 2.0 // Scala del marker: 1.0 = originale, 2.0 = doppio
+                    iconSize = 1.5 // Scala del marker: 1.0 = originale, 2.0 = doppio
                 }
 
 
                 val pList = mutableListOf<Point>()
                 val pList2 = mutableListOf<Point>()
-                val partenza = Point.fromLngLat(9.2333,45.5769)
-                val destinazione = Point.fromLngLat(9.2303,45.4769)
-                val drone = Point.fromLngLat(9.2303, 45.4769)
+                val partenza = Point.fromLngLat(ristorante.value?.lng ?: 0.0, ristorante.value?.lat ?: 0.0)
+                val destinazione = Point.fromLngLat(orderStatus.value?.destinazione?.lng ?:0.0, orderStatus.value?.destinazione?.lat ?:0.0)
+                val drone = Point.fromLngLat(orderStatus.value?.drone?.lng ?:0.0 , orderStatus.value?.drone?.lat ?:0.0)
                 pList.add(partenza)
                 pList.add(drone)
                 pList2.add(drone)
@@ -124,7 +124,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                 PolylineAnnotation(pList2){
                     lineColor = Color(0xFF8200FD)
                     lineWidth = 6.0
-                    lineOffset = 14.0
+
                 }
 
 
@@ -152,7 +152,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
 
                         if(orderStatus.value?.stato == "ON_DELIVERY"){
                             Text(
-                                text = "In consegna tra:" ,
+                                text = "In consegna tra: " ,
                                 modifier = Modifier.padding(bottom = 10.dp),
                                 style = TextStyle(fontSize = 20.sp)
                             )
@@ -160,7 +160,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                             Text(
                                 text = "${orderStatus.value?.tempoRimanente} minuti",
                                 modifier = Modifier.padding(bottom = 10.dp),
-                                style = TextStyle(fontSize = 20.sp, color = Color(0XFFFF7300))
+                                style = TextStyle(fontSize = 20.sp, color = Color(0XFFFF7300), fontWeight = FontWeight.SemiBold)
 
                             )
                         }else if (orderStatus.value?.stato == "COMPLETED"){
@@ -170,7 +170,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                                 style = TextStyle(fontSize = 20.sp)
                             )
                             Text(
-                                text = "${orderStatus.value?.orarioConsegna?.ora}",
+                                text = "${orderStatus.value?.orarioConsegna?.ora?.substring(0..4)}",
                                 modifier = Modifier.padding(bottom = 10.dp),
                                 style = TextStyle(fontSize = 20.sp, color = Color(0XFFFF7300))
 

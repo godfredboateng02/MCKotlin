@@ -32,103 +32,107 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
 import com.example.prova3.model.repository.GestioneAccountRepository
-import com.example.prova3.model.repository.GestioneAccountRepository.UpdateNameData
 import com.example.prova3.viewmodel.EditProfileViewModel
-import com.example.prova3.viewmodel.ProfileViewModel
-import kotlinx.coroutines.delay
 
 @Composable
-fun EditProfileData(navController: NavController, gestioneAccountRepository: GestioneAccountRepository){
-    BackHandler {
-        navController.navigate("profile")
-    }
-    var cognome by rememberSaveable { mutableStateOf("") }
-    var nome by rememberSaveable { mutableStateOf("") }
+fun EditProfileData(
+    navController: NavController,
+    gestioneAccountRepository: GestioneAccountRepository
+) {
+    BackHandler { navController.navigate("profile") }
 
-    val factory = viewModelFactory {
-        initializer {
-            EditProfileViewModel(gestioneAccountRepository)
-        }
-    }
+    /* ---------- STATE ---------- */
+    var cognome by rememberSaveable { mutableStateOf("") }
+    var nome    by rememberSaveable { mutableStateOf("") }
+
+    /* ---------- VIEWMODEL ---------- */
+    val factory = viewModelFactory { initializer { EditProfileViewModel(gestioneAccountRepository) } }
     val viewModel: EditProfileViewModel = viewModel(factory = factory)
     val done = viewModel.done.collectAsState()
-    if (done.value){
-        navController.navigate("Profile")
-    }
+    if (done.value) navController.navigate("Profile")
 
+    /* ---------- VALIDAZIONE ---------- */
+    val maxLen = 15
+    val formOk = cognome.isNotBlank() && nome.isNotBlank()
 
-    Column (
-        modifier = Modifier.fillMaxSize()
-    ){
+    /* ---------- UI ---------- */
+    Column(Modifier.fillMaxSize()) {
+
+        /* Header identico */
         Box(
-            modifier = Modifier.padding(bottom = 30.dp)
+            Modifier
+                .padding(bottom = 30.dp)
                 .height(100.dp)
-                .background(Color(0XFFFF7300))
-        ){
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-            ){
-                Text("<", modifier = Modifier.weight(1f).padding(top = 66.dp, start = 16.dp))
-                Text("Profilo / Modifica dati del profilo", modifier = Modifier.weight(5f).padding(top = 66.dp), style = titoloStyle)
+                .background(Color(0xFFFF7300))
+        ) {
+            Row(Modifier.fillMaxWidth()) {
+                Text("<", Modifier.weight(1f).padding(top = 66.dp, start = 16.dp))
+                Text(
+                    "Profilo / Modifica dati del profilo",
+                    Modifier.weight(5f).padding(top = 66.dp),
+                    style = titoloStyle
+                )
             }
         }
 
-        Text("Cognome", modifier = Modifier.padding(start = 50.dp, bottom = 10.dp),
-            style = CognomeStyle
-        )
+        /* ---------- COGNOME ---------- */
+        Text("Cognome", Modifier.padding(start = 50.dp, bottom = 10.dp), style = fieldLabelStyle)
 
         OutlinedTextField(
             value = cognome,
-            onValueChange = {
-                cognome = it
+            onValueChange = { new ->
+                if (new.length <= maxLen) cognome = new    // blocco oltre 15
             },
-            placeholder = {Text("es.Rossi")},
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth().padding(start = 50.dp, end = 50.dp)
-
+            placeholder = { Text("es. Rossi") },
+            singleLine  = true,
+            modifier    = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 50.dp)
         )
 
         Spacer(Modifier.height(30.dp))
 
-        Text("Nome", modifier = Modifier.padding(start = 50.dp, bottom = 10.dp),
-            style = CognomeStyle
-        )
+        /* ---------- NOME ---------- */
+        Text("Nome", Modifier.padding(start = 50.dp, bottom = 10.dp), style = fieldLabelStyle)
 
         OutlinedTextField(
             value = nome,
-            onValueChange = {
-                nome = it
+            onValueChange = { new ->
+                if (new.length <= maxLen) nome = new       // blocco oltre 15
             },
-            placeholder = {Text("es. Mario")},
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth().padding(start = 50.dp, end = 50.dp)
-
+            placeholder = { Text("es. Mario") },
+            singleLine  = true,
+            modifier    = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 50.dp)
         )
 
         Spacer(Modifier.height(50.dp))
 
+        /* ---------- BUTTON ---------- */
         Button(
             onClick = {
-                viewModel.updateUserData(nome,cognome)
-                      },
-            modifier = Modifier.fillMaxWidth().padding(start = 50.dp, end = 50.dp).height(60.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xff009436))
+                viewModel.updateUserData(nome, cognome)
+                Log.d("EditProfileData", "Aggiornamento $cognome $nome")
+            },
+            enabled = formOk,                                // attivo solo se entrambi compilati
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 50.dp)
+                .height(60.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor         = Color(0xFF009436),
+                disabledContainerColor = Color(0xFF009436).copy(alpha = 0.4f) // opaco quando disabilitato
+            )
         ) {
-            Text("Conferma le modifiche", style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium))
+            Text(
+                "Conferma le modifiche",
+                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium)
+            )
         }
-
-
-
     }
 }
 
-private val titoloStyle = TextStyle(
-    fontSize = 20.sp,
-    fontWeight = FontWeight.Medium,
-    color = Color(0xffffffff)
-)
-
-private val CognomeStyle = TextStyle(
-    fontSize = 20.sp,
-    fontWeight = FontWeight.Medium,
-)
+/* ---------- STILI ---------- */
+private val titoloStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Color.White)
+private val fieldLabelStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium)

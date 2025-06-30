@@ -1,3 +1,4 @@
+import android.R.attr.text
 import androidx.compose.runtime.saveable.rememberSaveable
 
 /*package com.example.prova3.screens
@@ -211,244 +212,220 @@ import androidx.navigation.NavController
 import com.example.prova3.model.repository.GestioneAccountRepository
 import com.example.prova3.viewmodel.EditCardViewModel
 import java.util.*
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 
 @Composable
 fun EditProfileCard(
     navController: NavController,
     gestioneAccountRepository: GestioneAccountRepository
 ) {
-    BackHandler {
-        navController.navigate("Profile")
+    BackHandler { navController.navigate("Profile") }
+
+    /* ---------- STATE ---------- */
+    var fullName          by rememberSaveable { mutableStateOf("") }
+    var numberState       by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(""))
     }
-    var fullName by rememberSaveable { mutableStateOf("") }
-    var number by rememberSaveable { mutableStateOf("") }
     var expireMonthString by rememberSaveable { mutableStateOf("") }
-    var expireYearString by rememberSaveable { mutableStateOf("") }
-    var cvv by rememberSaveable { mutableStateOf("") }
+    var expireYearString  by rememberSaveable { mutableStateOf("") }
+    var cvv               by rememberSaveable { mutableStateOf("") }
 
-    var numberError by remember { mutableStateOf(false) }
-    var fullNameError by remember { mutableStateOf(false) }
-    var expireMonthError by remember { mutableStateOf(false) }
-    var expireYearError by remember { mutableStateOf(false) }
-    var cvvError by remember { mutableStateOf(false) }
+    /* ---------- ERROR FLAGS ---------- */
+    var fullNameError  by remember { mutableStateOf(false) }
+    var numberError    by remember { mutableStateOf(false) }
+    var expireMonthErr by remember { mutableStateOf(false) }
+    var expireYearErr  by remember { mutableStateOf(false) }
+    var cvvError       by remember { mutableStateOf(false) }
 
-    val factory = viewModelFactory {
-        initializer {
-            EditCardViewModel(gestioneAccountRepository)
-        }
-    }
+    /* ---------- VIEWMODEL ---------- */
+    val factory = viewModelFactory { initializer { EditCardViewModel(gestioneAccountRepository) } }
     val viewModel: EditCardViewModel = viewModel(factory = factory)
     val done = viewModel.done.collectAsState()
-    if (done.value){
-        navController.navigate("Profile")
-    }
+    if (done.value) navController.navigate("Profile")
 
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    /* ---------- UI ---------- */
+    Column(Modifier.fillMaxSize()) {
+
+        /* ---------- HEADER ---------- */
         Box(
-            modifier = Modifier
+            Modifier
                 .padding(bottom = 30.dp)
                 .height(100.dp)
-                .background(Color(0XFFFF7300))
+                .background(Color(0xFFFF7300))
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(
-                    "<",
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(top = 66.dp, start = 16.dp)
-                )
+            Row(Modifier.fillMaxWidth()) {
+                Text("<", Modifier.weight(1f).padding(top = 66.dp, start = 16.dp))
                 Text(
                     "Profilo / Modifica dati della carta",
-                    modifier = Modifier
-                        .weight(5f)
-                        .padding(top = 66.dp),
+                    Modifier.weight(5f).padding(top = 66.dp),
                     style = titoloStyle
                 )
             }
         }
 
-        // FULL NAME
-        Text(
-            "Card FullName",
-            modifier = Modifier.padding(start = 50.dp, bottom = 10.dp),
-            style = CognomeStyle
-        )
+        /* ---------- FULL NAME ---------- */
+        Text("Card FullName", Modifier.padding(start = 50.dp, bottom = 10.dp), style = CognomeStyle)
 
         OutlinedTextField(
             value = fullName,
             onValueChange = {
                 if (it.length <= 31) {
                     fullName = it
-                    fullNameError = it.isBlank() || it.length > 31
+                    fullNameError = it.isBlank()
                 }
             },
             placeholder = { Text("Mario Rossi") },
-            singleLine = true,
-            modifier = Modifier
+            singleLine  = true,
+            isError     = fullNameError,
+            modifier    = Modifier
                 .fillMaxWidth()
-                .padding(start = 50.dp, end = 50.dp),
-            isError = fullNameError
+                .padding(horizontal = 50.dp)
         )
         if (fullNameError) {
-            Text(
-                text = "Il nome deve avere da 1 a 31 caratteri",
-                color = Color.Red,
-                modifier = Modifier.padding(start = 50.dp, top = 4.dp)
+            errorText(
+                "Il nome è obbligatorio",
+                Modifier.padding(start = 50.dp)   // ← rientro come il campo
             )
         }
 
         Spacer(Modifier.height(30.dp))
 
-        // CARD NUMBER
-        Text(
-            "Card Number",
-            modifier = Modifier.padding(start = 50.dp, bottom = 10.dp),
-            style = CognomeStyle
-        )
+        /* ---------- CARD NUMBER ---------- */
+        Text("Card Number", Modifier.padding(start = 50.dp, bottom = 10.dp), style = CognomeStyle)
 
         OutlinedTextField(
-            value = number,
-            onValueChange = {
-                val digits = it.filter { c -> c.isDigit() }
+            value = numberState,
+            onValueChange = { newState ->
+                val digits = newState.text.filter(Char::isDigit).take(16)
                 val formatted = digits.chunked(4).joinToString(" ")
-                if (formatted.length <= 19) {
-                    number = formatted
-                    numberError = digits.length != 16
-                }
+                numberState = newState.copy(
+                    text = formatted,
+                    selection = TextRange(formatted.length)   // cursore in fondo
+                )
+                numberError = digits.length != 16
             },
             placeholder = { Text("1234 5678 1234 5678") },
-            singleLine = true,
-            modifier = Modifier
+            singleLine  = true,
+            isError     = numberError,
+            modifier    = Modifier
                 .fillMaxWidth()
-                .padding(start = 50.dp, end = 50.dp),
-            isError = numberError
+                .padding(horizontal = 50.dp)
         )
         if (numberError) {
-            Text(
-                text = "Il numero della carta deve avere 16 cifre",
-                color = Color.Red,
-                modifier = Modifier.padding(start = 50.dp, top = 4.dp)
+            errorText(
+                "La carta deve avere 16 cifre",
+                Modifier.padding(start = 50.dp)   // ← rientro come il campo
             )
         }
 
         Spacer(Modifier.height(30.dp))
 
+        /* ---------- EXP DATE & CVV ---------- */
         Row(
-            modifier = Modifier
+            Modifier
                 .fillMaxWidth()
-                .padding(start = 50.dp, end = 50.dp),
+                .padding(horizontal = 50.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text("Expire date", modifier = Modifier.padding(bottom = 10.dp), style = CognomeStyle)
-
+                Text("Expire date", Modifier.padding(bottom = 10.dp), style = CognomeStyle)
                 Row {
                     OutlinedTextField(
                         value = expireMonthString,
                         onValueChange = {
-                            if (it.length <= 2 && it.all { c -> c.isDigit() }) {
+                            if (it.length <= 2 && it.all(Char::isDigit)) {
                                 expireMonthString = it
-                                val month = it.toIntOrNull() ?: -1
-                                expireMonthError = month !in 1..12
+                                val m = it.toIntOrNull() ?: -1
+                                expireMonthErr = m !in 1..12
                             }
                         },
                         placeholder = { Text("mm") },
-                        singleLine = true,
-                        modifier = Modifier.width(80.dp),
-                        isError = expireMonthError
+                        singleLine  = true,
+                        isError     = expireMonthErr,
+                        modifier    = Modifier.width(80.dp)
                     )
-
                     Spacer(Modifier.width(10.dp))
-
                     OutlinedTextField(
                         value = expireYearString,
                         onValueChange = {
-                            if (it.length <= 4 && it.all { c -> c.isDigit() }) {
+                            if (it.length <= 4 && it.all(Char::isDigit)) {
                                 expireYearString = it
-                                val year = it.toIntOrNull() ?: -1
-                                expireYearError = year <= currentYear - 1 || it.length != 4
+                                val y = it.toIntOrNull() ?: -1
+                                expireYearErr = y < currentYear || it.length != 4
                             }
                         },
                         placeholder = { Text("YYYY") },
-                        singleLine = true,
-                        modifier = Modifier.width(100.dp),
-                        isError = expireYearError
+                        singleLine  = true,
+                        isError     = expireYearErr,
+                        modifier    = Modifier.width(100.dp)
                     )
                 }
-                if (expireMonthError) {
-                    Text(
-                        text = "Mese 1-12, max 2 cifre",
-                        color = Color.Red,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-                if (expireYearError) {
-                    Text(
-                        text = "Anno non valido",
-                        color = Color.Red,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
+                if (expireMonthErr) errorText("Mese 1-12")
+                if (expireYearErr)  errorText("Anno non valido")
             }
-            Column {
-                Text("CVV/CVV2", modifier = Modifier.padding(bottom = 10.dp), style = CognomeStyle)
 
+            Column {
+                Text("CVV/CVV2", Modifier.padding(bottom = 10.dp), style = CognomeStyle)
                 OutlinedTextField(
                     value = cvv,
                     onValueChange = {
-                        if (it.length <= 3 && it.all { c -> c.isDigit() }) {
+                        if (it.length <= 3 && it.all(Char::isDigit)) {
                             cvv = it
                             cvvError = it.length != 3
                         }
                     },
                     placeholder = { Text("123") },
-                    singleLine = true,
-                    modifier = Modifier.width(80.dp),
-                    isError = cvvError
+                    singleLine  = true,
+                    isError     = cvvError,
+                    modifier    = Modifier.width(80.dp)
                 )
-                if (cvvError) {
-                    Text(
-                        text = "Max 3 cifre",
-                        color = Color.Red,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
+                if (cvvError) errorText("3 cifre")
             }
         }
 
         Spacer(Modifier.height(50.dp))
 
+        /* ---------- BUTTON ---------- */
+        val allOk =
+            !(fullNameError || numberError || expireMonthErr || expireYearErr || cvvError) &&
+                    fullName.isNotBlank() &&
+                    numberState.text.filter(Char::isDigit).length == 16 &&
+                    expireMonthString.isNotBlank() &&
+                    expireYearString.isNotBlank() &&
+                    cvv.length == 3
+
         Button(
             onClick = {
                 val expireMonth = expireMonthString.toIntOrNull() ?: 0
-                val expireYear = expireYearString.toIntOrNull() ?: 0
-                val cleanNumber = number.replace(" ", "")
+                val expireYear  = expireYearString.toIntOrNull() ?: 0
+                val cleanNumber = numberState.text.replace(" ", "")
                 viewModel.updateCardData(fullName, cleanNumber, expireMonth, expireYear, cvv)
                 Log.d("EditProfileCard", "$expireMonth $expireYear $cvv")
             },
-            enabled = !(fullNameError || numberError || expireMonthError || expireYearError || cvvError),
+            enabled = allOk,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 50.dp, end = 50.dp)
+                .padding(horizontal = 50.dp)
                 .height(60.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xff009436))
+            colors = ButtonDefaults.buttonColors(
+                containerColor         = Color(0xFF009436),
+                disabledContainerColor = Color(0xFF009436).copy(alpha = 0.4f)
+            )
         ) {
             Text("Conferma le modifiche", style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium))
         }
     }
 }
 
-private val titoloStyle = TextStyle(
-    fontSize = 20.sp,
-    fontWeight = FontWeight.Medium,
-    color = Color.White
-)
+/* ---------- HELPERS ---------- */
+@Composable
+private fun errorText(msg: String, modifier: Modifier = Modifier) =
+    Text(msg, color = Color.Red, fontSize = 12.sp, modifier = modifier.padding(top = 4.dp))
 
-private val CognomeStyle = TextStyle(
-    fontSize = 20.sp,
-    fontWeight = FontWeight.Medium,
-)
+/* ---------- STILI ---------- */
+private val titoloStyle  = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Color.White)
+private val CognomeStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium)
+
