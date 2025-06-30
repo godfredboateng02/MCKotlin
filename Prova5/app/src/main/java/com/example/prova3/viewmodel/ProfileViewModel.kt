@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.prova3.model.LastOrderMenu
+import com.example.prova3.model.TimeData
 import com.example.prova3.model.repository.GestioneAccountRepository
 import com.example.prova3.model.repository.GestioneAccountRepository.UserData
 import com.example.prova3.model.repository.GestioneOrdiniRepository
@@ -11,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.sql.Time
 
 class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository, val gestioneOrdiniRepository: GestioneOrdiniRepository) : ViewModel() {
     private val _datiUtente = MutableStateFlow<UserData?>(null)
@@ -21,6 +23,8 @@ class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository,
     val isLoadingUser : StateFlow<Boolean> = _isLoadingUser
     private val _isLoadingMenu = MutableStateFlow<Boolean>(false)
     val isLoadingMenu : StateFlow<Boolean> = _isLoadingMenu
+    private val _lastOrderTime = MutableStateFlow<TimeData?>(null)
+    val lastOrderTime : StateFlow<TimeData?> = _lastOrderTime
 
     fun getUserData(){
         viewModelScope.launch {
@@ -49,6 +53,16 @@ class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository,
                 Log.d("ProfileViewModel","${e.message}")
                 _isLoadingMenu.value = false
 
+            }
+        }
+    }
+
+    fun lastOrderTime(){
+        viewModelScope.launch {
+            try {
+                _lastOrderTime.value = gestioneAccountRepository.lastOrderTime()
+            }catch (e : Exception){
+                Log.d("ProfileViewModel","${e.message}")
             }
         }
     }
