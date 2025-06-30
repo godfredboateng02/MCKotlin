@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,7 +39,7 @@ import com.example.prova3.model.repository.GestioneMenuRepository
 import com.example.prova3.viewmodel.HomepageViewModel
 
 @Composable
-fun PageOfShame(){
+fun PageOfShame(navController: NavController){
     BackHandler {
 
     }
@@ -53,17 +54,19 @@ fun PageOfShame(){
             Modifier.fillMaxSize(),
         ){
             Box(
-                Modifier.fillMaxWidth().height(120.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .height(500.dp),
             ){
-                Row (
+                Column(
                     Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
                 ){
                     Text("PAGE OF SHAME", Modifier.padding(top = 50.dp, start = 16.dp),style=TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF7300)))
-
-                }
-                Row {
                     Text(text = "Per usare l'app servono i permessi per la pozione precisa", modifier = Modifier.padding(top = 50.dp, start =16.dp), style =TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color(0xFF000000)) )
+                    Button(onClick = { navController.navigate("LoadingScreen") }) {
+                        Text(text = "riprova")
+                    }
+
                 }
             }
 

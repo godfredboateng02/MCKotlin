@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
                     Delivery(navController, gestioneOrdiniRepository)
                 }
                 composable(route = "PageOfShame"){
-                    PageOfShame()
+                    PageOfShame(navController)
                 }
             }
         }
