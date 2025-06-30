@@ -1,6 +1,7 @@
 package com.example.prova3.screens
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -33,9 +35,13 @@ import com.example.prova3.model.repository.GestioneAccountRepository
 import com.example.prova3.model.repository.GestioneAccountRepository.UpdateNameData
 import com.example.prova3.viewmodel.EditProfileViewModel
 import com.example.prova3.viewmodel.ProfileViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun EditProfileData(navController: NavController, gestioneAccountRepository: GestioneAccountRepository){
+    BackHandler {
+        navController.navigate("profile")
+    }
     var cognome by rememberSaveable { mutableStateOf("") }
     var nome by rememberSaveable { mutableStateOf("") }
 
@@ -45,6 +51,10 @@ fun EditProfileData(navController: NavController, gestioneAccountRepository: Ges
         }
     }
     val viewModel: EditProfileViewModel = viewModel(factory = factory)
+    val done = viewModel.done.collectAsState()
+    if (done.value){
+        navController.navigate("Profile")
+    }
 
 
     Column (
@@ -100,8 +110,7 @@ fun EditProfileData(navController: NavController, gestioneAccountRepository: Ges
         Button(
             onClick = {
                 viewModel.updateUserData(nome,cognome)
-                navController.popBackStack(route = "Profile", inclusive = false)
-            },
+                      },
             modifier = Modifier.fillMaxWidth().padding(start = 50.dp, end = 50.dp).height(60.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xff009436))
         ) {

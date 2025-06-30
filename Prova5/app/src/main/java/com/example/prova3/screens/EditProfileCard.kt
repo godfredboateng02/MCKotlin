@@ -193,6 +193,7 @@ private val CognomeStyle = TextStyle(
 )*/
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -216,6 +217,9 @@ fun EditProfileCard(
     navController: NavController,
     gestioneAccountRepository: GestioneAccountRepository
 ) {
+    BackHandler {
+        navController.navigate("Profile")
+    }
     var fullName by rememberSaveable { mutableStateOf("") }
     var number by rememberSaveable { mutableStateOf("") }
     var expireMonthString by rememberSaveable { mutableStateOf("") }
@@ -234,6 +238,10 @@ fun EditProfileCard(
         }
     }
     val viewModel: EditCardViewModel = viewModel(factory = factory)
+    val done = viewModel.done.collectAsState()
+    if (done.value){
+        navController.navigate("Profile")
+    }
 
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
@@ -421,7 +429,6 @@ fun EditProfileCard(
                 val cleanNumber = number.replace(" ", "")
                 viewModel.updateCardData(fullName, cleanNumber, expireMonth, expireYear, cvv)
                 Log.d("EditProfileCard", "$expireMonth $expireYear $cvv")
-                navController.popBackStack(route = "Profile", inclusive = false)
             },
             enabled = !(fullNameError || numberError || expireMonthError || expireYearError || cvvError),
             modifier = Modifier

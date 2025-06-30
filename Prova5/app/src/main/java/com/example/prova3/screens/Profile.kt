@@ -1,6 +1,7 @@
 package com.example.prova3.screens
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,6 +43,9 @@ import com.example.prova3.viewmodel.ProfileViewModel
 @Composable
 fun Profile(navController: NavController, gestioneAccountRepository: GestioneAccountRepository, gestioneOrdiniRepository: GestioneOrdiniRepository){
 
+    BackHandler {
+        navController.navigate("Homepage")
+    }
     val factory = viewModelFactory {
         initializer {
             ProfileViewModel(gestioneAccountRepository,gestioneOrdiniRepository)

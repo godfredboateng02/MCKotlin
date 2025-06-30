@@ -1,5 +1,6 @@
 package com.example.prova3.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,9 @@ import com.example.prova3.viewmodel.HomepageViewModel
 
 @Composable
 fun Homepage(navController: NavController,gestioneMenuRepository: GestioneMenuRepository){
+    BackHandler {
+
+    }
 
     val factory = viewModelFactory {
         initializer {

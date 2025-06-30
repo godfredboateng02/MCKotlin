@@ -2,6 +2,7 @@ package com.example.prova3.screens
 
 import MenuImageView
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,7 +37,9 @@ import com.example.prova3.viewmodel.MenuDetailViewModel
 
 @Composable
 fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMenuRepository, gestioneAccountRepository: GestioneAccountRepository, gestioneOrdiniRepository: GestioneOrdiniRepository, mid : Int){
-
+    BackHandler {
+        navController.navigate("Homepage")
+    }
     val factory = viewModelFactory {
         initializer {
             MenuDetailViewModel(gestioneMenuRepository,gestioneAccountRepository,gestioneOrdiniRepository)
@@ -45,6 +49,7 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
     val menuDettaglio = viewModel.menuDetail.collectAsState()
     val hasCard = viewModel.hasCard.collectAsState()
     val hasOrder = viewModel.hasOrder.collectAsState()
+    val isLoading = viewModel.isLoading.collectAsState()
 
     @Composable
     fun BottoneOrdine(){
@@ -96,52 +101,58 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
         viewModel.hasOrder()
     }
 
-    Column (
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        //immagine
-        Column(Modifier.fillMaxWidth()){
-            MenuImageView(
-                immagine = menuDettaglio.value?.immagine
-            )
-        }
-
-        Log.d("MenuDetail",menuDettaglio.value.toString())
-
-        Box(
+    if (!isLoading.value){
+        Column (
             modifier = Modifier
                 .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Column (
-                modifier = Modifier.fillMaxSize()
-                    .padding(bottom = 20.dp, start = 20.dp, end = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+            //immagine
+            Column(Modifier.fillMaxWidth()){
+                MenuImageView(
+                    immagine = menuDettaglio.value?.immagine
+                )
+            }
+
+            Log.d("MenuDetail",menuDettaglio.value.toString())
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
             ){
-                Text(menuDettaglio.value?.nome.toString(), style = titoloStyle, modifier = titoloModifier)
+                Column (
+                    modifier = Modifier.fillMaxSize()
+                        .padding(bottom = 20.dp, start = 20.dp, end = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ){
+                    Text(menuDettaglio.value?.nome.toString(), style = titoloStyle, modifier = titoloModifier)
 
 
-                //Descrizione breve
-                Text("Descrizione Completa", style = descrizioneStyle)
+                    //Descrizione breve
+                    Text("Descrizione Completa", style = descrizioneStyle)
 
-                //Descrizionelunga
-                Text(menuDettaglio.value?.descrizione.toString(), style = descrizioneLungaStyle)
+                    //Descrizionelunga
+                    Text(menuDettaglio.value?.descrizione.toString(), style = descrizioneLungaStyle)
 
-                //Prezzo
-                Text("10,99€", style = priceStyle, modifier = priceModifier)
+                    //Prezzo
+                    Text("10,99€", style = priceStyle, modifier = priceModifier)
 
 
-                Spacer(modifier = Modifier.weight(1f))
-                Text("Tempo di consegna stimato: 10 min", style = timeDistanceStyle)
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text("Tempo di consegna stimato: 10 min", style = timeDistanceStyle)
 
-                BottoneOrdine()
+                    BottoneOrdine()
+                }
             }
         }
+    }else{
+        Column (Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+            CircularProgressIndicator()
+        }
     }
-}
+    }
 
 //Modifier
 private var image = Modifier

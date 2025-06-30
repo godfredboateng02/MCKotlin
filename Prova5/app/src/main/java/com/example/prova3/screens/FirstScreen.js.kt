@@ -1,6 +1,7 @@
 package com.example.prova3.screens
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,9 @@ import com.example.prova3.viewmodel.HomepageViewModel
 
 @Composable
 fun FirstScreen(navController: NavController, gestioneAccountRepository: GestioneAccountRepository){
+    BackHandler {
+
+    }
     var cognome by rememberSaveable { mutableStateOf("") }
     var nome by rememberSaveable { mutableStateOf("") }
 

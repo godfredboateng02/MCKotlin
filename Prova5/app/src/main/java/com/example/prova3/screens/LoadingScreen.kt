@@ -1,6 +1,7 @@
 package com.example.prova3.screens
 
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,9 @@ import com.example.prova3.model.Storage
 
 @Composable
 fun LoadingScreen(navController: NavController){
+    BackHandler {
+
+    }
 
 
 

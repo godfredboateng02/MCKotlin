@@ -7,6 +7,7 @@ import com.example.prova3.model.LastOrderMenu
 import com.example.prova3.model.repository.GestioneAccountRepository
 import com.example.prova3.model.repository.GestioneAccountRepository.UserData
 import com.example.prova3.model.repository.GestioneOrdiniRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ class ProfileViewModel(val gestioneAccountRepository: GestioneAccountRepository,
         viewModelScope.launch {
             try {
                 _isLoadingUser.value = true
+                delay(500)
                 _datiUtente.value = gestioneAccountRepository.getUserData()
                 _isLoadingUser.value = false
 

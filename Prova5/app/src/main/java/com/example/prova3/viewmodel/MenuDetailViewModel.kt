@@ -28,8 +28,6 @@ class MenuDetailViewModel(val gestioneMenuRepository: GestioneMenuRepository, va
     private val _hasOrder = MutableStateFlow<Boolean>(false)
     var hasOrder : StateFlow<Boolean> = _hasOrder
 
-    private val _orderStatus = MutableStateFlow<OrderStatus?>(null)
-    var orderStatus : StateFlow<OrderStatus?> = _orderStatus
 
 
     fun hasCard(){
