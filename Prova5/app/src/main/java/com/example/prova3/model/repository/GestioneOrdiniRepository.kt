@@ -8,6 +8,7 @@ import com.example.prova3.model.Location
 import com.example.prova3.model.Storage
 import com.example.prova3.model.TimeData
 import com.example.prova3.repository.Formattazione
+import kotlin.jvm.Throws
 
 class GestioneOrdiniRepository {
 
@@ -37,12 +38,13 @@ class GestioneOrdiniRepository {
 
             Storage.setRistorante(mid)
             Storage.setOid(ordine?.oid ?: -1)
+                Log.d("OID_ULTIMO","${ordine?.oid ?: "problemone"}")
             Storage.setMid(mid)
 
             orderStatus()
         } catch (error: Exception) {
-            println("errore in effettuaOrdine: $error")
             Storage.setConsegna(false)
+                throw error
         }
     }
 
@@ -75,22 +77,27 @@ class GestioneOrdiniRepository {
                 return null
             }
 
+           /* Log.d("TEMPO","${raw.expectedDeliveryTimestamp}")
             val tempoRimanente = Formattazione.tempoRimanente(raw.expectedDeliveryTimestamp)
-            val orarioConsegna = Formattazione.extractTime(raw.deliveryTimestamp)
+            Log.d("TEMPO","${tempoRimanente}")
 
-            Log.d("GestioneOrdini",tempoRimanente.toString())
+            Log.d("TEMPO","${raw.deliveryTimestamp}")
+            val orarioConsegna = Formattazione.extractTime(raw.deliveryTimestamp)
+            Log.d("TEMPO","${orarioConsegna}")
+
+
+            Log.d("GestioneOrdini",tempoRimanente.toString())*/
 
             return OrderStatusCompact(
                 stato = raw.status,
                 partenza = Storage.getRistorante(),
                 destinazione = raw.deliveryLocation,
                 drone = raw.currentPosition,
-                tempoRimanente = tempoRimanente,
-                orarioConsegna = orarioConsegna
+                tempoRimanente = 3,
+                orarioConsegna = TimeData("ciao","ciao")
             )
         } catch (error: Exception) {
-            println("errore in orderStatus: $error")
-            return null
+            throw error
         }
     }
 

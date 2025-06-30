@@ -49,8 +49,7 @@ class GestioneAccountRepository {
                 carta = carta
             )
         } catch (error: Exception) {
-            println("errore da getUserData: $error")
-            null
+            throw error
         }
     }
 
@@ -109,7 +108,6 @@ class GestioneAccountRepository {
             // Per semplicità uso il formato base, puoi aggiungere libreria per date se serve
             timeData
         } catch (error: Exception) {
-            println("errore da lastOrderTime: $error")
-            null
+            throw error
         }
     }}
