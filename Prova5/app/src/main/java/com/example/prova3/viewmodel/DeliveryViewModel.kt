@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 
 
-class LastOrderViewModel(val gestioneOrdiniRepository: GestioneOrdiniRepository) : ViewModel() {
+class DeliveryViewModel(val gestioneOrdiniRepository: GestioneOrdiniRepository) : ViewModel() {
 
     private val _lastOrderMenu = MutableStateFlow<LastOrderMenu?>(null)
     val lastOrderMenu : StateFlow<LastOrderMenu?> = _lastOrderMenu

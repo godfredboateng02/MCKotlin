@@ -34,22 +34,24 @@ import androidx.navigation.NavController
 import com.example.prova3.R
 import com.example.prova3.components.LastOrderView
 import com.example.prova3.model.repository.GestioneOrdiniRepository
-import com.example.prova3.viewmodel.LastOrderViewModel
+import com.example.prova3.viewmodel.DeliveryViewModel
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
+import com.mapbox.maps.extension.compose.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.extension.compose.annotation.rememberIconImage
+
 
 @Composable
 fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrdiniRepository) {
 
     val factory = viewModelFactory {
         initializer {
-            LastOrderViewModel(gestioneOrdiniRepository)
+            DeliveryViewModel(gestioneOrdiniRepository)
         }
     }
-    val viewModel: LastOrderViewModel = viewModel(factory = factory)
+    val viewModel: DeliveryViewModel = viewModel(factory = factory)
 
     val ultimoOrdine = viewModel.lastOrderMenu.collectAsState()
     val isLoading = viewModel.isLoading.collectAsState()
@@ -76,14 +78,47 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                     }
                 },
             ) {
-                val marker = rememberIconImage(
+                val partenzaIcon = rememberIconImage(
                     key = R.drawable.location_marker,
                     painter = painterResource(R.drawable.location_marker),
                 )
-                PointAnnotation(point = Point.fromLngLat(9.2303, 45.4769)) {
-                    iconImage = marker
+                /*PointAnnotation(point = Point.fromLngLat(9.2303, 45.4769)) {
+                    iconImage = partenzaIcon
+                    iconSize = 0.3 // Scala del marker: 1.0 = originale, 2.0 = doppio
+                }*/
+
+                val destinazioneIcon = rememberIconImage(
+                    key = R.drawable.location_marker,
+                    painter = painterResource(R.drawable.location_marker),
+                )
+                PointAnnotation(point = Point.fromLngLat(9.2333, 45.5769)) {
+                    iconImage = destinazioneIcon
                     iconSize = 0.3 // Scala del marker: 1.0 = originale, 2.0 = doppio
                 }
+
+                val droneIcon = rememberIconImage(
+                    key = R.drawable.drone,
+                    painter = painterResource(R.drawable.drone),
+                )
+                PointAnnotation(point = Point.fromLngLat(9.2303, 45.4769)) {
+                    iconImage = droneIcon
+                    iconSize = 2.0 // Scala del marker: 1.0 = originale, 2.0 = doppio
+                }
+
+
+                val pList = mutableListOf<Point>()
+                val p1 = Point.fromLngLat(9.2333,45.5769)
+                val p2 = Point.fromLngLat(9.2303,45.4769)
+                val drone = Point.fromLngLat(9.2303, 45.4769)
+                pList.add(p1)
+                pList.add(drone)
+                pList.add(p2)
+                PolylineAnnotation(pList){
+                    lineColor = Color(0xFF8200FD)
+                    lineWidth = 6.0
+                }
+
+
             }
 
             Column(

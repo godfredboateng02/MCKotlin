@@ -121,12 +121,19 @@ fun Profile(navController: NavController, gestioneAccountRepository: GestioneAcc
             //Ordini recenti
             Text("Ordini recenti", modifier = Modifier.padding(start = 16.dp, top = 30.dp, bottom = 15.dp), style = titoliStyle)
 
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center
-            ){
-                LastOrderView(ultimoOrdine.value)
+
+            if (ultimoOrdine.value != null){
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    LastOrderView(ultimoOrdine.value)
+                }
+            }else{
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                    Text("nessun ordine recente")
+                }
             }
 
 
