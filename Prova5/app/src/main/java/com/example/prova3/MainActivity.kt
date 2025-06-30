@@ -72,6 +72,13 @@ class MainActivity : ComponentActivity() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             currentRoute = navBackStackEntry?.destination?.route
 
+            // Salva anche il mid corrente se siamo in MenuDetail
+            navBackStackEntry?.arguments?.getInt("mid")?.let { mid ->
+                if (navBackStackEntry!!.destination.route == "MenuDetail/{mid}") {
+                    currentMid = mid
+                }
+            }
+
             NavHost(navController, "LoadingScreen") {
                 composable(route = "FirstScreen") {
                     FirstScreen(navController, gestioneAccountRepository)
@@ -115,10 +122,20 @@ class MainActivity : ComponentActivity() {
         // Salva la route corrente quando l'app va in pausa
         CoroutineScope(Dispatchers.IO).launch {
             currentRoute?.let { route ->
-                if (route != "PageOfShame"){
-                    Storage.setPagina(route)
+                when {
+                    route == "PageOfShame" -> {
+                        // Non salvare PageOfShame
+                    }
+                    route == "MenuDetail/{mid}" && currentMid != null -> {
+                        // Salva MenuDetail con il mid concreto
+                        Storage.setPagina("MenuDetail/$currentMid")
+                        println("Route salvata in onPause: MenuDetail/$currentMid")
+                    }
+                    else -> {
+                        Storage.setPagina(route)
+                        println("Route salvata in onPause: $route")
+                    }
                 }
-                println("Route salvata in onPause: $route")
             }
         }
     }
@@ -142,5 +159,6 @@ class MainActivity : ComponentActivity() {
     companion object {
         // Variabile statica per tenere traccia della route corrente
         var currentRoute: String? = null
+        var currentMid: Int? = null
     }
 }
