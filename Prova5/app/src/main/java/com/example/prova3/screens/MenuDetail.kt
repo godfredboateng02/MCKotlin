@@ -109,10 +109,12 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
         viewModel.hasOrder()
     }
 
+    val scroll = rememberScrollState()
+
     if (!isLoading.value){
         Column (
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize().verticalScroll(scroll),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
@@ -130,10 +132,10 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
                     .fillMaxSize(),
             ){
 
-                val scroll = rememberScrollState()
+
 
                 Column (
-                    modifier = Modifier.fillMaxSize().verticalScroll(scroll)
+                    modifier = Modifier.fillMaxSize()
                         .padding(bottom = 20.dp, start = 20.dp, end = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
