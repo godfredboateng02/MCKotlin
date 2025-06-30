@@ -1,8 +1,14 @@
 package com.example.prova3.model
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 
@@ -26,6 +32,7 @@ object Storage {
         val RISTORANTE_LNG = floatPreferencesKey("ristorante_lng")
         val CONSEGNA = booleanPreferencesKey("consegna")
     }
+
 
     // Cache CONDIVISA - UNA SOLA ISTANZA per tutta l'app!
     private var cachedSid: String? = null
@@ -63,6 +70,8 @@ object Storage {
 
     // ===== METODI IDENTICI AL JAVASCRIPT =====
 
+
+    //TODO: se non è più la prima volta che logghiamo sull'app allora non mandare la firstScreen ma la pagina principale
     suspend fun getPagina(): String {
         checkInitialized()
         if (cachedPagina == null) {
@@ -118,6 +127,7 @@ object Storage {
     suspend fun getUid(): Int {
         checkInitialized()
         if (cachedUid != null) {
+            Log.d("UID",cachedUid.toString())
             return cachedUid!!
         }
 
@@ -126,6 +136,7 @@ object Storage {
 
         if (storedUid != null) {
             cachedUid = storedUid
+            Log.d("UID",cachedUid.toString())
             return cachedUid!!
         }
 

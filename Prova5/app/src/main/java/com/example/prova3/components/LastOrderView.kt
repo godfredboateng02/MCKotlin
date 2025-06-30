@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.prova3.R
 import com.example.prova3.model.LastOrderMenu
-import com.example.prova3.model.repository.GestioneOrdiniRepository
 
 val descrizioneCorta = "Assortimento elegante di nigiri lucidi, maki arrotolati con precisione, sashimi di tonno rosso vivo e salmone vellutato, decorato con wasabi pungente"
 
@@ -70,7 +69,7 @@ fun LastOrderView(ultimoOrdine: LastOrderMenu?){
                     Text(ultimoOrdine.nome ?: "", style = titleTextStyle)
                     Text(ultimoOrdine.descrizione, style = descrizioneCortaStyle, maxLines = 3)
                     Spacer(modifier = Modifier.weight(1f))
-                    Text("13.99€", style = priceStyle)
+                    Text("${ultimoOrdine.prezzo}€", style = priceStyle)
                 }
             }
         }

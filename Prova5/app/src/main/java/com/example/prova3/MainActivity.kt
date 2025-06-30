@@ -1,5 +1,6 @@
 package com.example.prova3
 
+import EditProfileCard
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -20,13 +21,13 @@ import com.example.prova3.model.Storage
 import com.example.prova3.model.repository.GestioneAccountRepository
 import com.example.prova3.model.repository.GestioneMenuRepository
 import com.example.prova3.model.repository.GestioneOrdiniRepository
-import com.example.prova3.screens.EditProfileCard
-import com.example.prova3.screens.Homepage
-import com.example.prova3.screens.Profile
+import com.example.prova3.screens.Delivery
 import com.example.prova3.screens.EditProfileData
 import com.example.prova3.screens.FirstScreen
+import com.example.prova3.screens.Homepage
 import com.example.prova3.screens.LoadingScreen
 import com.example.prova3.screens.MenuDetail
+import com.example.prova3.screens.Profile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -95,6 +96,10 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(route = "LoadingScreen") {
                     LoadingScreen(navController)
+                }
+
+                composable (route = "Delivery"){
+                    Delivery(navController, gestioneOrdiniRepository)
                 }
             }
         }

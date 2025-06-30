@@ -31,8 +31,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavController
-import com.example.prova3.components.MenuListView
 import com.example.prova3.R
+import com.example.prova3.components.MenuListView
 import com.example.prova3.model.repository.GestioneMenuRepository
 import com.example.prova3.viewmodel.HomepageViewModel
 
@@ -50,6 +50,7 @@ fun Homepage(navController: NavController,gestioneMenuRepository: GestioneMenuRe
     val isLoading = viewModel.isLoading.collectAsState()
 
 
+    // CARICA LA LISTA DEI MENU CON LE LORO IMMAGINI
     LaunchedEffect(Unit) {
         //spinning wheel
         viewModel.getListaMenu()

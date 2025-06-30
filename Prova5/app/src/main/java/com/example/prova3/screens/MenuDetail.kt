@@ -52,7 +52,9 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
             Button(
                 onClick = {
                     viewModel.buyMenu(mid)
-                    Log.d("MenuDetails","Acquista")},
+                    Log.d("MenuDetails","Acquista")
+                    navController.navigate("Delivery")},
+
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00)),
                 modifier = bottone
 
@@ -75,7 +77,7 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
             Log.d("Pulsante ordine", "${hasOrder.value}")
             Button(
                 onClick = {
-                    navController.navigate("Homepage") // da sostituire con pagina consegna
+                    navController.navigate("Delivery") // da sostituire con pagina consegna
                     Log.d("MenuDetails","Acquista button pressed")},
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00)),
                 modifier = bottone
@@ -101,9 +103,11 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         //immagine
-        MenuImageView(
-            immagine = menuDettaglio.value?.immagine
-        )
+        Column(Modifier.fillMaxWidth()){
+            MenuImageView(
+                immagine = menuDettaglio.value?.immagine
+            )
+        }
 
         Log.d("MenuDetail",menuDettaglio.value.toString())
 

@@ -1,6 +1,7 @@
 // GestioneOrdiniRepository.kt
 package com.example.prova3.model.repository
 
+import android.util.Log
 import com.example.prova3.model.CommunicationController
 import com.example.prova3.model.LastOrderMenu
 import com.example.prova3.model.Location
@@ -69,7 +70,7 @@ class GestioneOrdiniRepository {
             }
 
             val raw = CommunicationController.getOrderStatus(oid)
-            println("POST orderstatus: $raw")
+            println("POST orderstatus: ${raw.toString()}")
             if (raw == null) {
                 return null
             }
@@ -77,7 +78,7 @@ class GestioneOrdiniRepository {
             val tempoRimanente = Formattazione.tempoRimanente(raw.expectedDeliveryTimestamp)
             val orarioConsegna = Formattazione.extractTime(raw.deliveryTimestamp)
 
-
+            Log.d("GestioneOrdini",tempoRimanente.toString())
 
             return OrderStatusCompact(
                 stato = raw.status,
