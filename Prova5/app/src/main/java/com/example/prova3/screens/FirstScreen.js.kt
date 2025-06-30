@@ -123,7 +123,7 @@ fun FirstScreen(
             onClick = {
                 Log.d("EditProfileData", "Modifica dei dati… $cognome $nome")
                 viewModel.updateUserData(nome, cognome)
-                navController.navigate("Homepage")
+                navController.navigate("LoadingScreen")
             },
             enabled = formValid,                                // disattiva finché non valido
             modifier = Modifier

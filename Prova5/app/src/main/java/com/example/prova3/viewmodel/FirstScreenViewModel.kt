@@ -4,6 +4,7 @@ import android.util.Log
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.prova3.model.Storage
 import com.example.prova3.model.repository.GestioneAccountRepository
 import com.example.prova3.model.repository.GestioneAccountRepository.UpdateNameData
 
@@ -15,6 +16,7 @@ class FirstScreenViewModel(val gestioneAccountRepository: GestioneAccountReposit
             try {
                 val user = UpdateNameData(nome, cognome)
                 gestioneAccountRepository.updateUserName(user)
+                Storage.setPagina("Homepage")
                 Log.d("ProfileViewModel","Modifica dei dati...${user}")
             }catch (e: Exception){
                 Log.d("ProfileViewModel","Error: ${e.message}")

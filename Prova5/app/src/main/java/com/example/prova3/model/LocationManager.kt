@@ -37,7 +37,7 @@ object LocationManager {
     }
 
     // Verifica se abbiamo i permessi per la posizione
-    private fun hasLocationPermission(): Boolean {
+    fun hasLocationPermission(): Boolean {
         checkInitialized()
         return ActivityCompat.checkSelfPermission(
             appContext,
