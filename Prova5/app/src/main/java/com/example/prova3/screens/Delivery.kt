@@ -82,10 +82,10 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                     key = R.drawable.location_marker,
                     painter = painterResource(R.drawable.location_marker),
                 )
-                /*PointAnnotation(point = Point.fromLngLat(9.2303, 45.4769)) {
+                PointAnnotation(point = Point.fromLngLat(9.2303, 45.4769)) {
                     iconImage = partenzaIcon
                     iconSize = 0.3 // Scala del marker: 1.0 = originale, 2.0 = doppio
-                }*/
+                }
 
                 val destinazioneIcon = rememberIconImage(
                     key = R.drawable.location_marker,
@@ -122,6 +122,7 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                 PolylineAnnotation(pList2){
                     lineColor = Color(0xFF8200FD)
                     lineWidth = 6.0
+                    lineOffset = 14.0
                 }
 
 
