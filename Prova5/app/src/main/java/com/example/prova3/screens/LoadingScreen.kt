@@ -1,6 +1,7 @@
 package com.example.prova3.screens
 
 
+import android.health.connect.datatypes.ExerciseRoute.Location
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,8 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 import androidx.navigation.NavController
+import com.example.prova3.model.LocationManager
 
 import com.example.prova3.model.Storage
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -28,7 +31,13 @@ fun LoadingScreen(navController: NavController){
 
     LaunchedEffect(Unit) {
         //spinning wheel
-        navController.navigate(Storage.getPagina())
+        delay(70)
+        val pagina = Storage.getPagina()
+        if (LocationManager.hasLocationPermission() || pagina == "FirstScreen"){
+            navController.navigate(pagina)
+        }else{
+            navController.navigate("PageOfShame")
+        }
     }
 
         Column (Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){

@@ -27,6 +27,7 @@ import com.example.prova3.screens.FirstScreen
 import com.example.prova3.screens.Homepage
 import com.example.prova3.screens.LoadingScreen
 import com.example.prova3.screens.MenuDetail
+import com.example.prova3.screens.PageOfShame
 import com.example.prova3.screens.Profile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -101,6 +102,9 @@ class MainActivity : ComponentActivity() {
                 composable (route = "Delivery"){
                     Delivery(navController, gestioneOrdiniRepository)
                 }
+                composable(route = "PageOfShame"){
+                    PageOfShame(navController)
+                }
             }
         }
     }
@@ -111,7 +115,9 @@ class MainActivity : ComponentActivity() {
         // Salva la route corrente quando l'app va in pausa
         CoroutineScope(Dispatchers.IO).launch {
             currentRoute?.let { route ->
-                Storage.setPagina(route)
+                if (route != "PageOfShame"){
+                    Storage.setPagina(route)
+                }
                 println("Route salvata in onPause: $route")
             }
         }

@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,19 +42,24 @@ fun FirstScreen(
     gestioneAccountRepository: GestioneAccountRepository
 ) {
 
-    BackHandler { /* se ti serve intercettare il back */ }
+    BackHandler {
 
-    // ───── INPUT STATE ─────
+    }
+
+
     var cognome by rememberSaveable { mutableStateOf("") }
     var nome    by rememberSaveable { mutableStateOf("") }
 
-    // ───── VIEWMODEL ─────
     val factory = viewModelFactory {
         initializer { FirstScreenViewModel(gestioneAccountRepository) }
     }
     val viewModel: FirstScreenViewModel = viewModel(factory = factory)
 
-    // ───── VALIDAZIONE ─────
+    val done = viewModel.done.collectAsState()
+    if (done.value){
+        navController.navigate("LoadingScreen")
+    }
+
     val formValid = cognome.isNotBlank() && nome.isNotBlank()
     val maxLen    = 15
 
@@ -123,7 +129,6 @@ fun FirstScreen(
             onClick = {
                 Log.d("EditProfileData", "Modifica dei dati… $cognome $nome")
                 viewModel.updateUserData(nome, cognome)
-                navController.navigate("Homepage")
             },
             enabled = formValid,                                // disattiva finché non valido
             modifier = Modifier
