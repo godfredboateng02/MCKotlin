@@ -91,9 +91,11 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                     key = R.drawable.location_marker,
                     painter = painterResource(R.drawable.location_marker),
                 )
-                PointAnnotation(point = Point.fromLngLat(ristorante.value?.lng ?: 0.0, ristorante.value?.lat ?: 0.0)) {
-                    iconImage = partenzaIcon
-                    iconSize = 0.3 // Scala del marker: 1.0 = originale, 2.0 = doppio
+                if (orderStatus.value?.stato == "ON_DELIVERY"){
+                    PointAnnotation(point = Point.fromLngLat(ristorante.value?.lng ?: 0.0, ristorante.value?.lat ?: 0.0)) {
+                        iconImage = partenzaIcon
+                        iconSize = 0.3 // Scala del marker: 1.0 = originale, 2.0 = doppio
+                    }
                 }
 
                 val destinazioneIcon = rememberIconImage(
@@ -109,13 +111,15 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                     key = R.drawable.drone,
                     painter = painterResource(R.drawable.drone),
                 )
-                PointAnnotation(point = Point.fromLngLat(orderStatus.value?.drone?.lng ?:0.0 , orderStatus.value?.drone?.lat ?:0.0)) {
-                    iconImage = droneIcon
-                    iconSize = 1.5 // Scala del marker: 1.0 = originale, 2.0 = doppio
-                    textField = "Drone"
-                    textColor = Color(0xFF8200FD)
-                    textAnchor = TextAnchor.BOTTOM
-                    textOffset = listOf(0.0, 2.0)
+                if (orderStatus.value?.stato == "ON_DELIVERY"){
+                    PointAnnotation(point = Point.fromLngLat(orderStatus.value?.drone?.lng ?:0.0 , orderStatus.value?.drone?.lat ?:0.0)) {
+                        iconImage = droneIcon
+                        iconSize = 1.5 // Scala del marker: 1.0 = originale, 2.0 = doppio
+                        textField = "Drone"
+                        textColor = Color(0xFF8200FD)
+                        textAnchor = TextAnchor.BOTTOM
+                        textOffset = listOf(0.0, 2.0)
+                    }
                 }
 
 
@@ -128,14 +132,18 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                 pList.add(drone)
                 pList2.add(drone)
                 pList2.add(destinazione)
-                PolylineAnnotation(pList){
-                    lineColor = Color(0xFF8200FD)
-                    lineWidth = 6.0
-                }
-                PolylineAnnotation(pList2){
-                    lineColor = Color(0xFF8200FD)
-                    lineWidth = 6.0
 
+                if (orderStatus.value?.stato == "ON_DELIVERY"){
+                    PolylineAnnotation(pList){
+                        lineColor = Color(0xFF8200FD)
+                        lineWidth = 6.0
+                    }
+                }
+                if (orderStatus.value?.stato == "ON_DELIVERY"){
+                    PolylineAnnotation(pList2){
+                        lineColor = Color(0xFF8200FD)
+                        lineWidth = 6.0
+                    }
                 }
 
 
