@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.prova3.model.LastOrderMenu
 import com.example.prova3.model.repository.GestioneOrdiniRepository
 import com.example.prova3.model.repository.GestioneOrdiniRepository.OrderStatusCompact
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -41,8 +42,12 @@ class DeliveryViewModel(val gestioneOrdiniRepository: GestioneOrdiniRepository) 
     fun getOrderStatus(){
         viewModelScope.launch {
             try {
-                _orderStatus.value = gestioneOrdiniRepository.orderStatus()
-                Log.d("LastOrderView","Stato recuperato...")
+                do {
+                    _orderStatus.value = gestioneOrdiniRepository.orderStatus()
+                    Log.d("LastOrderView","Stato recuperato...")
+                    delay(5000)
+                } while (_orderStatus.value?.stato == "ON_DELIVERY")
+
             }catch (e: Exception){
                 Log.d("LastOrderView","Error: ${e.message}")
             }
