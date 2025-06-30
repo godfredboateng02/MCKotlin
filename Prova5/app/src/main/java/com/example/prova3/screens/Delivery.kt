@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -21,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -41,6 +43,7 @@ import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportS
 import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
 import com.mapbox.maps.extension.compose.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.extension.compose.annotation.rememberIconImage
+import com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor
 
 
 @Composable
@@ -105,6 +108,10 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                 PointAnnotation(point = Point.fromLngLat(orderStatus.value?.drone?.lng ?:0.0 , orderStatus.value?.drone?.lat ?:0.0)) {
                     iconImage = droneIcon
                     iconSize = 1.5 // Scala del marker: 1.0 = originale, 2.0 = doppio
+                    textField = "Drone"
+                    textColor = Color(0xFF8200FD)
+                    textAnchor = TextAnchor.BOTTOM
+                    textOffset = listOf(0.0, 2.0)
                 }
 
 
@@ -134,8 +141,9 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(300.dp)
+                    .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp))
                     .background(Color.White)
-                    .align(Alignment.BottomCenter),
+                    .align(Alignment.BottomCenter)
             ) {
 
                 Spacer(Modifier.height(20.dp))
@@ -144,7 +152,8 @@ fun Delivery(navController: NavController, gestioneOrdiniRepository: GestioneOrd
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 20.dp),
+                        .padding(bottom = 20.dp)
+                        .background(Color(0X44FFFFF)),
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

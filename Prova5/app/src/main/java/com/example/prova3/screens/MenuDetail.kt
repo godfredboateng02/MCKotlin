@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -70,7 +72,7 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
                 modifier = bottone
 
             ) {
-                Text("Effettua ordine ${menuDettaglio.value?.prezzo ?: ""}")
+                Text("Effettua ordine ${menuDettaglio.value?.prezzo ?: ""}€")
             }
         }else if (!hasCard.value){
             Button(
@@ -127,8 +129,11 @@ fun MenuDetail(navController: NavController, gestioneMenuRepository: GestioneMen
                 modifier = Modifier
                     .fillMaxSize(),
             ){
+
+                val scroll = rememberScrollState()
+
                 Column (
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize().verticalScroll(scroll)
                         .padding(bottom = 20.dp, start = 20.dp, end = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)

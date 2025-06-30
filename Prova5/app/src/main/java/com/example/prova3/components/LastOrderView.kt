@@ -20,12 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.prova3.R
 import com.example.prova3.model.LastOrderMenu
 
 val descrizioneCorta = "Assortimento elegante di nigiri lucidi, maki arrotolati con precisione, sashimi di tonno rosso vivo e salmone vellutato, decorato con wasabi pungente"
@@ -66,7 +65,7 @@ fun LastOrderView(ultimoOrdine: LastOrderMenu?){
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(ultimoOrdine.nome ?: "", style = titleTextStyle)
-                    Text(ultimoOrdine.descrizione, style = descrizioneCortaStyle, maxLines = 3)
+                    Text(ultimoOrdine.descrizione, style = descrizioneCortaStyle, maxLines = 3, overflow = TextOverflow.Ellipsis)
                     Spacer(modifier = Modifier.weight(1f))
                     Text("${ultimoOrdine.prezzo}€", style = priceStyle)
                 }
