@@ -20,6 +20,7 @@ import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import android.content.Context
+import kotlinx.coroutines.delay
 
 object CommunicationController {
     private val BASE_URL = "https://develop.ewlab.di.unimi.it/mc/2425"
@@ -66,6 +67,7 @@ object CommunicationController {
             HttpMethod.DELETE -> client.delete(completeUrlString, request)
             HttpMethod.PUT -> client.put(completeUrlString, request)
         }
+        delay(1000) //DA TOGLIERE POI
         return result
     }
 

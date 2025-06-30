@@ -60,7 +60,7 @@ fun Profile(navController: NavController, gestioneAccountRepository: GestioneAcc
         viewModel.lastOrderMenu()
     }
 
-    if ( true){
+    if ( !isLoadingMenu.value && !isLoadingUser.value){
         datiUtente.value?.let {
             Log.d("Profile",it.toString())
         }
